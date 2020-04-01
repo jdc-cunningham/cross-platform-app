@@ -3,6 +3,8 @@
 - how to add SSL, saw in console
 - make a base install regarding the platform detection, re-usable methods like the window generator
 - look into .env file for prod set by `process.env.NODE_ENV` -> `production` for example, useful for that devtools not being visible in prod
+- multi-screen support regarding positioning of openend windows
+- locking sub windows inside parent windows
 
 ### Important
 - preload
