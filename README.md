@@ -6,3 +6,8 @@ I know, I know... just use a website... ReactJS and some backend... why why why.
 I'm just doing crash courses, initially then I'll do my actual app.
 
 The goal though is to share code when possible, the back end particularly regarding the REST API and data store.
+
+# Electron - desktop app
+I find the crash course videos done by Traversy Media to be super effective in getting a grasp on a new tech/building something with it.
+So I'm follwoing through this one [here](https://www.youtube.com/watch?v=kN1Czs0m1SU), I'm not aware if he's released anything newer.
+I've actually watched this before but I haven't built any desktop apps since.
