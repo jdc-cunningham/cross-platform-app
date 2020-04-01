@@ -2,7 +2,7 @@ const electron = require('electron');
 const url = require('url');
 const path = require('path');
 
-const { app, BrowserWindow, Menu } = electron;
+const { app, BrowserWindow, Menu, ipcMain } = electron;
 const macPlatform = process.platform == 'darwin';
 
 let mainWindow;
@@ -11,7 +11,11 @@ let addWindow;
 // listen for app to be ready
 app.on('ready', () => {
     // create new window
-    mainWindow = new BrowserWindow({});
+    mainWindow = new BrowserWindow({
+        webPreferences: {
+            preload: path.join(__dirname, 'mainWindowPreload.js')
+        }
+    });
 
     // load html file into window
     mainWindow.loadURL(url.format({
@@ -36,9 +40,12 @@ app.on('ready', () => {
 const createAddWindow = () => {
     // create new window
     addWindow = new BrowserWindow({
-        width: 300,
-        height: 200,
-        title: 'Add todo item'
+        width: 400,
+        height: 300,
+        title: 'Add todo item',
+        webPreferences: {
+            preload: path.join(__dirname, 'addWindowPreload.js')
+        }
     });
 
     // load html file into window
@@ -53,6 +60,12 @@ const createAddWindow = () => {
         addWindow = null;
     });
 };
+
+// catch todo:add from addWindow.html
+ipcMain.on('todoForm:add', (e, item) => {
+    mainWindow.webContents.send('todo:add', item);
+    addWindow.close(); // close small window/form
+});
 
 // create menu template
 const mainMenuTemplate = [

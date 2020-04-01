@@ -7,9 +7,18 @@
         <form>
             <div>
                 <label>Enter todo</label>
-                <input type="text" id="item" autofocus />
+                <input type="text" id="todo" autofocus />
             </div>
-            <button type="submit">Add todo</button>
+            <button type="button" id="submit">Add todo</button>
         </form>
+        <script>
+            const todoInput = document.getElementById('todo');
+            const submitBtn = document.getElementById('submit');
+
+            submitBtn.addEventListener('click', () => {
+                console.log(todoInput.value);
+                window.sendAddWindowData(todoInput.value);
+            });
+        </script>
     </body>
 </html>
