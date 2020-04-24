@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Cross Platform App</title>
+        <link rel="stylesheet" href="./css/css-reset.css">
+        <link rel="stylesheet" href="./css/index.css">
+    </head>
+    <body>
+        <div class="cpa__dock">
+            <div class="cpa__dock-app-icons">
+                <div class="cpa__dock-app-icon" id="notes"></div>
+                <div class="cpa__dock-app-icon" id="draw"></div>
+            </div>
+            <button type="button" class="cpa__dock-plus-icon"></button>
+        </div>
+        <div class="cpa__app-body">
+            <!-- <h2>Select an app on the left</h2> -->
+            <div class="cpa__app-body-module module-notes">
+                <div class="module-notes__header">
+                    <input type="text" placeholder="search note" class="module-notes__search-bar"/>
+                </div>
+                <div class="module-notes__body">
+                    <textarea class="modules-notes__text-area" placeholder="write..."></textarea>
+                </div>
+            </div>
+        </div>
+        <script type="text/javascript" src="./index.js"></script>
+    </body>
+</html>
