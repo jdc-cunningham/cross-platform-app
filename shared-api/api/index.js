@@ -6,7 +6,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
 const port = 5000;
-const { getNotesCount, saveNote } = require('./methods/notes');
+const { getNotesCount, saveNote, searchNotes, getNoteBody } = require('./methods/notes');
 
 // CORs
 app.use((req, res, next) => {
@@ -25,6 +25,8 @@ app.use(bodyParser.json()); // can set limit
 // routes
 app.get('/get-notes-count', getNotesCount);
 app.post('/save-note', saveNote);
+app.post('/search-notes', searchNotes);
+app.post('/get-note-body', getNoteBody);
 
 app.listen(port, () => {
     console.log(`App running... on port ${port}`);

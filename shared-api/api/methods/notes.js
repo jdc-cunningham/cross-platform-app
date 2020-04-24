@@ -48,10 +48,66 @@ const getNotesCount = (req, res) => {
 }
 
 const searchNotes = (req, res) => {
+    // get these from post params
+    if (
+        !Object.keys(req.body).length ||
+        typeof req.body.noteQueryStr === "undefined"
+    ) {
+        res.status(400).send('search is empty');
+    }
 
+    // this should search against the body too if the title is empty
+    const partialNoteName = '%' + req.body.noteQueryStr + '%'; // left/right wild card search
+
+    // straightouta SO
+    // https://stackoverflow.com/questions/1066453/mysql-group-by-and-order-by
+    // this does not work
+    pool.query(
+        `SELECT t.* FROM (SELECT id, name FROM notes WHERE name LIKE ? ORDER BY id DESC) t GROUP BY t.name`,
+        [partialNoteName],
+        (err, qres) => { // this is bad res vs. qres
+            if (err) {
+                console.log('failed to search notes', err);
+                res.status(400).send('request failed');
+            } else {
+                res.status(200).json({notes: qres});
+            }
+        }
+    );
+}
+
+// I think I'm aware this could be subject to an enumeration attack or something
+// like that since it's just an incrementing id
+const getNoteBody = (req, res) => {
+    // this could be like a middleware or something
+    // get these from post params
+    if (
+        !Object.keys(req.body).length ||
+        typeof req.body.noteId === "undefined" ||
+        req.body.noteId === 0
+    ) {
+        res.status(400).send('note id is invalid');
+    }
+
+    const noteId = req.body.noteId;
+
+    pool.query(
+        `SELECT body FROM notes WHERE id = ?`,
+        [noteId],
+        (err, qres) => { // this is bad res vs. qres
+            if (err) {
+                console.log('failed to get note body', err);
+                res.status(400).send('request failed');
+            } else {
+                res.status(200).json(qres);
+            }
+        }
+    );
 }
 
 module.exports = {
     getNotesCount,
-    saveNote
+    saveNote,
+    searchNotes,
+    getNoteBody
 };
