@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 // import logo from './logo.svg';
-import './App.css';
+import './App.scss';
 import Dock from './components/dock/Dock';
 import AppWindow from './components/app-window/AppWindow';
 

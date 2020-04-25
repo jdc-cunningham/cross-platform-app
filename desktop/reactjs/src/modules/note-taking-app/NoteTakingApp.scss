@@ -8,6 +8,12 @@
 
 .module-notes__header {
     flex: 0;
+
+    &.create {
+        .module-notes__search-bar-create-btn {
+            display: block;
+        }
+    }
 }
 
 .module-notes__header input {
@@ -22,6 +28,18 @@
     right: 0;
     transform: translateY(-50%); // center vertically
     display: none;
+    background-color: #2a9df4;
+    color: white;
+    border: 0;
+    border-radius: 5px;
+    font-size: 1rem;
+    padding: 5px 10px;
+    cursor: pointer;
+    margin-right: 10px;
+
+    &:hover {
+        background-color: #187bcd;
+    }
 }
 
 .module-notes__body {
