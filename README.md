@@ -1,3 +1,18 @@
+### About
+This is a cross-platform note-taking app primarily along with some other "sub-apps" or "modules" sprinkled in eg. a canvas drawing tool that can be saved.
+
+### Technologies
+* **Desktop** - `Electron`/`ReactJS`
+
+### Desktop
+The desktop app is a `ReactJS` build loaded inside an `Electron` app.
+
+#### Desktop - build/deploy
+Within the `/desktop/` folder is a `/reactjs/` folder, in there you do your changes to the base `ReactJS` app then do your `npm run build`.
+After that run `npm start` inside the `/desktop/` folder to run the Electron app. If all looks well, package it eg. `npm run package-win`.
+Check `package.json` for the different packager options.
+The executable file(s) will be in `/desktop/release-builds/` per platform you choose.
+
 ### Attributes
 #### Icons sourced from Flaticon
 * [Doc icon](https://www.flaticon.com/authors/monkik)

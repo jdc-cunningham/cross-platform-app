@@ -14,15 +14,10 @@ let addWindow;
 app.on('ready', () => {
     // create new window
     mainWindow = new BrowserWindow();
-    // mainWindow = new BrowserWindow({
-    //     webPreferences: {
-    //         preload: path.join(__dirname, 'mainWindowPreload.js')
-    //     }
-    // });
 
     // load html file into window
     mainWindow.loadURL(url.format({
-        pathname: path.join(__dirname, 'mainWindow.html'),
+        pathname: path.join(__dirname, './reactjs/build/index.html'),
         protocol: 'file:',
         slashes: true
     }));
@@ -38,31 +33,6 @@ app.on('ready', () => {
     // insert menu
     Menu.setApplicationMenu(mainMenu);
 });
-
-// handle create add window
-// const createAddWindow = () => {
-//     // create new window
-//     addWindow = new BrowserWindow({
-//         width: 400,
-//         height: 300,
-//         title: 'Add todo item',
-//         webPreferences: {
-//             preload: path.join(__dirname, 'addWindowPreload.js')
-//         }
-//     });
-
-//     // load html file into window
-//     addWindow.loadURL(url.format({
-//         pathname: path.join(__dirname, 'addWindow.html'),
-//         protocol: 'file:',
-//         slashes: true
-//     }));
-
-//     // reduce memory usage
-//     addWindow.on('close', () => {
-//         addWindow = null;
-//     });
-// };
 
 // catch todo:add from addWindow.html
 ipcMain.on('todoForm:add', (e, item) => {
