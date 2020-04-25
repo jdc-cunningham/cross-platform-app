@@ -2,7 +2,10 @@
 This is a cross-platform note-taking app primarily along with some other "sub-apps" or "modules" sprinkled in eg. a canvas drawing tool that can be saved.
 
 ### Technologies
-* **Desktop** - `Electron`/`ReactJS`
+* **Desktop** - `Electron/ReactJS`
+
+### API
+This is the heart of these random connected apps. It is a remote API accessible by all the different apps eg. mobile/desktop/chrome extension. This one is written with `Node/Express/MySQL`. For me I use a VPS from [OVH](https://www.ovh.com/world/) so my API is remote in that it's not on my home network.
 
 ### Desktop
 The desktop app is a `ReactJS` build loaded inside an `Electron` app.
