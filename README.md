@@ -2,6 +2,7 @@
 This is a cross-platform note-taking app primarily along with some other "sub-apps" or "modules" sprinkled in eg. a canvas drawing tool that can be saved.
 
 ### Technologies
+* **Shared API** - `Node/Express/MySQL`
 * **Desktop** - `Electron/ReactJS`
 
 ### API

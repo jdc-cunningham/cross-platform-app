@@ -16,6 +16,14 @@
     padding: 10px;
 }
 
+.module-notes__search-bar-create-btn {
+    position: absolute;
+    top: 50%;
+    right: 0;
+    transform: translateY(-50%); // center vertically
+    display: none;
+}
+
 .module-notes__body {
     display: flex;
     align-items: center;
