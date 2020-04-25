@@ -1,0 +1,33 @@
+.module-notes__header, .module-notes__body {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+.module-notes__header {
+    flex: 0;
+}
+
+.module-notes__header input {
+    width: 100%;
+    font-size: 18px;
+    padding: 10px;
+}
+
+.module-notes__body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    margin-top: 10px;
+}
+
+.module-notes__body textarea {
+    width: 100%;
+    height: calc(100% - 20px); /* oh ho ho it's magic */
+    font-size: 18px;
+    padding: 10px;
+    overflow-y: auto;
+}

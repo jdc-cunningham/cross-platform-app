@@ -5,7 +5,7 @@ import Dock from './components/dock/Dock';
 import AppWindow from './components/app-window/AppWindow';
 
 const App = () => {
-	const [activeApp, setActiveApp] = useState(null);
+	const [activeApp, setActiveApp] = useState("notes");
 
 	return (
 		<div className="App">
