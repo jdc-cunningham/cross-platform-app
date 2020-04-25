@@ -1,17 +1,17 @@
 import React, { useState, useRef } from 'react';
-import './NoteTakingApp.scss';
+import './NoteTakingModule.scss';
 import axios from 'axios';
 
 const NoteTakingApp = (props) => {
     const [notesModuleState, setNotesModuleState] = useState({
         searchStr: "",
+        searchResults: [],
         activeNote: null,
         createMode: false,
         creatingNote: false
     });
 
     const noteNameInput = useRef(null);
-    const noteCreateBtn = useRef(null);
     const noteBodyInput = useRef(null);
 
     /**
@@ -29,14 +29,24 @@ const NoteTakingApp = (props) => {
         : process.env.REACT_APP_SEARCH_API_BASE_PATH;
     const searchNotesApiPath = notesApiBasePath + '/search-notes';
     const createNoteApiPath = notesApiBasePath + '/save-note';
+    const getNoteBodyApiPath = notesApiBasePath + '/get-note-body';
 
     const searchNotes = () => {
+        setNotesModuleState(prev => ({
+            ...prev,
+            searchStr: noteNameInput.current.value
+        }));
+
         const searchStr = noteNameInput.current.value; // this could be taken directly/val passed as param
         if (!searchStr) { // this is questionable eg. need to update state
             setNotesModuleState(prev => ({
                 ...prev,
-                createMode: false
+                createMode: false,
+                searchStr: "",
+                activeNote: null,
+                searchResults: []
             }));
+            return;
         }
 
         clearTimeout(searchApiTimeout); // ugh these naming convetions are bad ahhh
@@ -45,15 +55,20 @@ const NoteTakingApp = (props) => {
                 noteQueryStr: searchStr
             })
             .then((res) => { // pointing this out I use both .then and async/await
-                console.log(res);
                 if (res.status === 200) {
                     if (res.data.notes.length) {
                         // show results
+                        setNotesModuleState(prev => ({
+                            ...prev,
+                            createMode: false,
+                            searchResults: res.data.notes
+                        }));
                     } else {
                         // new note, show create button
                         setNotesModuleState(prev => ({
                             ...prev,
-                            createMode: true
+                            createMode: true,
+                            searchResults: []
                         }));
                     }
                 } else {
@@ -63,7 +78,7 @@ const NoteTakingApp = (props) => {
             .catch((err) => {
                 console.log(err, err.response);
             });
-        }, 1000);
+        }, 250);
     }
 
     const createNote = () => {
@@ -84,7 +99,6 @@ const NoteTakingApp = (props) => {
             noteBody
         })
         .then((res) => { // pointing this out I use both .then and async/await
-            console.log(res);
             if (res.status === 200) {
                 setNotesModuleState(prev => ({
                     ...prev,
@@ -97,7 +111,7 @@ const NoteTakingApp = (props) => {
                     creatingNote: false
                 }));
             } else {
-                console.log('search failed'); // this sucks need global modal or something, or subtle error
+                console.log('note creation failed'); // this sucks need global modal or something, or subtle error
             }
         })
         .catch((err) => {
@@ -105,30 +119,125 @@ const NoteTakingApp = (props) => {
         });
     }
 
+    const getNoteBody = (noteId) => {
+        axios.post(getNoteBodyApiPath, {
+            noteId
+        })
+        .then((res) => { // pointing this out I use both .then and async/await
+            if (res.status === 200 && res.data.length) {
+                setActiveNote(res.data[0]);
+            } else {
+                console.log('failed to retrieve note body');
+            }
+        })
+        .catch((err) => {
+            console.log(err, err.response);
+        });
+    }
+
+    /**
+     * Expects object: {name, body} both property values are strings
+     * @param {Object} noteData
+     */
+    const setActiveNote = (noteData) => {
+        setNotesModuleState(prev => ({
+            ...prev,
+            searchStr: "",
+            searchResults: [],
+            activeNote: {
+                name: noteData.name,
+                body: noteData.body
+            }
+        }));
+    }
+
+    let updateNoteTimeout;
+    const updateNote = () => {
+        clearTimeout(updateNoteTimeout);
+        setNotesModuleState(prev => ({
+            ...prev,
+            activeNote: {
+                name: notesModuleState.activeNote.name,
+                body: noteBodyInput.current.value
+            }
+        }));
+
+        updateNoteTimeout = setTimeout(() => {
+            // almost same copy as createNote but different UI behavior
+            const noteName = noteNameInput.current.value;
+            const noteBody = noteBodyInput.current.value;
+
+            axios.post(createNoteApiPath, {
+                noteName,
+                noteBody
+            })
+            .then((res) => {
+                if (res.status === 200) {
+                    setNotesModuleState(prev => ({
+                        ...prev,
+                        activeNote: {
+                            name: notesModuleState.activeNote.name,
+                            body: noteBodyInput.current.value
+                        }
+                    }));
+                } else {
+                    console.log('save failed'); // this sucks need global modal or something, or subtle error
+                }
+            })
+            .catch((err) => {
+                console.log(err, err.response);
+            });
+        }, 250);
+    }
+
+    const getNoteNameValue = () => {
+        if (notesModuleState.searchStr) {
+            return notesModuleState.searchStr;
+        }
+        
+        if (!!notesModuleState.activeNote) {
+            return notesModuleState.activeNote.name;
+        }
+        
+        return "";
+    }
+
     return (
-        <div className="cpa__module" id="module--note-taking-app">
+        <div className="cpa__module" id="module--note-taking-module">
             <div className={ !notesModuleState.createMode ? "module-notes__header" : "module-notes__header create" }>
                 <input
                     ref={ noteNameInput }
-                    onKeyUp={ searchNotes }
+                    onChange={ searchNotes }
                     type="text"
                     placeholder="search note"
                     className="module-notes__search-bar"
-                    defaultValue={ notesModuleState.activeNote ? notesModuleState.activeNote.name : notesModuleState.searchStr }
+                    value={ getNoteNameValue() }
                     disabled={ notesModuleState.creatingNote }/>
                 <button
                     type="button"
                     className="module-notes__search-bar-create-btn"
                     onClick={ createNote }
                     disabled={ notesModuleState.creatingNote }>Create</button>
+                    { !notesModuleState.searchResults.length
+                        ? null
+                        : <div className="module-notes__search-bar-results">
+                            { notesModuleState.searchResults.map(note => (
+                                <div
+                                    key={ note.id }
+                                    className="module-notes__search-bar-result"
+                                    // this is an ugly artifact from this SELECT MAX(id) query to get the distinct row but latest version
+                                    onClick={ () => getNoteBody(note['MAX(id)']) }>{ note.name }</div>
+                            )) }
+                        </div> }
             </div>
             <div className="module-notes__body">
                 <textarea
                     ref={ noteBodyInput }
                     className="modules-notes__text-area"
                     placeholder="write..."
-                    defaultValue={ !notesModuleState.activeNote ? "" : notesModuleState.activeNote.body }
-                    disabled={ notesModuleState.creatingNote }></textarea>
+                    value={ notesModuleState.activeNote ? notesModuleState.activeNote.body : "" }
+                    disabled={ notesModuleState.creatingNote }
+                    onChange={ updateNote }></textarea>
             </div>
         </div>
     )

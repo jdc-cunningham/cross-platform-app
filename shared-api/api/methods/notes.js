@@ -63,7 +63,7 @@ const searchNotes = (req, res) => {
     // https://stackoverflow.com/questions/1066453/mysql-group-by-and-order-by
     // this does not work
     pool.query(
-        `SELECT t.* FROM (SELECT id, name FROM notes WHERE name LIKE ? ORDER BY id DESC) t GROUP BY t.name`,
+        `SELECT MAX(id), id, name FROM notes WHERE name LIKE ? GROUP BY name`,
         [partialNoteName],
         (err, qres) => { // this is bad res vs. qres
             if (err) {
@@ -92,7 +92,7 @@ const getNoteBody = (req, res) => {
     const noteId = req.body.noteId;
 
     pool.query(
-        `SELECT body FROM notes WHERE id = ?`,
+        `SELECT name, body FROM notes WHERE id = ?`,
         [noteId],
         (err, qres) => { // this is bad res vs. qres
             if (err) {

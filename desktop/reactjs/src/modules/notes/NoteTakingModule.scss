@@ -42,6 +42,30 @@
     }
 }
 
+.module-notes__search-bar-results {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    display: block;
+    overflow-y: auto;
+    max-height: 50vh;
+    z-index: 1;
+    background-color: white;
+    border: 1px solid #808080;
+    border-top: 0;
+}
+
+.module-notes__search-bar-result {
+    cursor: pointer;
+    padding: 10px;
+
+    &:hover {
+        background-color: #2a9df4;
+        color: white;
+    }
+}
+
 .module-notes__body {
     display: flex;
     align-items: center;
@@ -52,7 +76,7 @@
 
 .module-notes__body textarea {
     width: 100%;
-    height: calc(100% - 20px); /* oh ho ho it's magic */
+    height: 100%;
     font-size: 18px;
     padding: 10px;
     overflow-y: auto;

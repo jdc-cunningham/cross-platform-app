@@ -2,7 +2,8 @@ import React from 'react';
 import './AppWindow.scss';
 
 // modules
-import NoteTakingApp from './../../modules/note-taking-app/NoteTakingApp' ;
+import NoteTakingModule from './../../modules/notes/NoteTakingModule' ;
+import CanvasDrawingModule from './../../modules/drawing/CanvasDrawingModule';
 
 const AppWindow = (props) => {
     const activeApp = props.activeApp;
@@ -10,7 +11,9 @@ const AppWindow = (props) => {
     const renderModule = (activeApp) => {
         switch(activeApp) {
             case "notes":
-                return <NoteTakingApp />;
+                return <NoteTakingModule />;
+            case "drawing":
+                return <CanvasDrawingModule />;
             default:
                 return <h2>Select an app on the left</h2>
         }
