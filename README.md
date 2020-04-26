@@ -11,6 +11,8 @@ This is the heart of these random connected apps. It is a remote API accessible 
 ### Desktop
 The desktop app is a `ReactJS` build loaded inside an `Electron` app.
 
+![current design and functionality as of 04/26/2020](./electron-basic-app-based-on-reactjs-04-26-2020.gif)
+
 #### Desktop - build/deploy
 Within the `/desktop/` folder is a `/reactjs/` folder, in there you do your changes to the base `ReactJS` app then do your `npm run build`.
 After that run `npm start` inside the `/desktop/` folder to run the Electron app. If all looks well, package it eg. `npm run package-win`.

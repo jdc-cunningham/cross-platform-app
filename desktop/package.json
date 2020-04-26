@@ -3,10 +3,9 @@
   "version": "1.0.0",
   "description": "the Electron component",
   "main": "main.js",
-  "dependencies": {
-    "electron": "^8.2.3"
-  },
+  "dependencies": {},
   "devDependencies": {
+    "electron": "^8.2.3",
     "electron-packager": "^14.2.1"
   },
   "scripts": {
