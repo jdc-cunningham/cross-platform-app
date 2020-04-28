@@ -11,3 +11,6 @@ The goal though is to share code when possible, the back end particularly regard
 I find the crash course videos done by Traversy Media to be super effective in getting a grasp on a new tech/building something with it.
 So I'm follwoing through this one [here](https://www.youtube.com/watch?v=kN1Czs0m1SU), I'm not aware if he's released anything newer.
 I've actually watched this before but I haven't built any desktop apps since.
+
+# React Native - mobile app
+I again followed [Traversy Media's crash course on RN](https://www.youtube.com/watch?v=Hf4MJH0jDb4), very good, it has no networking stuff though, just internal in-memory state and UI changes.
