@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, FlatList, Alert } from 'react-native';
+import { View, StyleSheet, FlatList, Alert, Text } from 'react-native';
 import Header from './components/Header.js';
+import Notes from './modules/notes.js';
+import Draw from './modules/draw.js';
 
 const App = () => {
     const subModules = [
@@ -10,7 +12,7 @@ const App = () => {
         name: "draw"}
     ];
 
-    const [activeModule, setActiveModule] = useState(""); // still using strings, should enumerate
+    const [activeModule, setActiveModule] = useState("notes"); // still using strings, should enumerate
     const [menuOpen, setMenuOpen] = useState(false);
 
     const toggleMenu = () => {
@@ -19,7 +21,19 @@ const App = () => {
 
     const selectModule = ( selectedModule ) => {
         setActiveModule(selectedModule);
+        toggleMenu();
     }
+
+    const getActiveModule = (() => {
+        switch(activeModule) {
+            case "notes":
+                return <Notes />
+            case "draw":
+                return <Draw />
+            default:
+                return <Text style={ styles.defaultModuleText }>No app selected</Text>
+        }
+    })();
 
     return (
         <View style={ styles.container }>
@@ -29,11 +43,16 @@ const App = () => {
                 menuOpen={ menuOpen }
                 toggleMenu={ toggleMenu }
                 subModules={ subModules } />
+            { getActiveModule }
         </View>
     )
 }
 
 const styles = StyleSheet.create({
+    defaultModuleText: {
+        padding: 5,
+        fontSize: 18
+    }
 });
 
 export default App;

@@ -16,7 +16,7 @@ const Header = ({ activeModule, selectModule, menuOpen, toggleMenu, subModules }
                 <FlatList
                     data={ subModules }
                     renderItem={ ({ item }) => (
-                        <TouchableOpacity style={ styles.subModuleMenuRow }>
+                        <TouchableOpacity style={ styles.subModuleMenuRow } onPress={ () => selectModule(item.name) }>
                             <View key={ item.id } selectModule={ item.name }>
                                 <Text style={ styles.subModuleMenuRowTitle }>{ item.name }</Text>
                             </View>
