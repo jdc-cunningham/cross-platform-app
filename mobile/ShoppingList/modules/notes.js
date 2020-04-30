@@ -1,5 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { Text, View, StyleSheet, TextInput, Image, FlatList, TouchableOpacity } from 'react-native';
+import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import { getPercent } from '../utils/math';
 
 /**
@@ -192,6 +193,10 @@ const Notes = () => {
             createNote();
         }
     }
+
+    const deleteNote = ( noteId ) => {
+        // need API delete
+    }
     
     // the weird "MAX(id)" thing below is an artifact from the database schema where I'm selecting the most recent
     // distinct row with the same column value(note name)
@@ -216,8 +221,11 @@ const Notes = () => {
                         keyExtractor={ item => item.id.toString() }
                         renderItem={ ({ item }) => (
                             <TouchableOpacity style={ styles.noteSearchResult } onPress={ () => getNoteBody(item["MAX(id)"]) }>
-                                <View selectNote={ item.id }>
+                                <View style={ styles.noteSearchResultGroup } selectNote={ item.id }>
                                     <Text style={ styles.noteSearchResultText }>{ item.name }</Text>
+                                    <TouchableOpacity>
+                                        <Icon style={ styles.noteSearchResultRemove } name="remove" size={ 18 } color="firebrick" onPress={ () => deleteNote(item.id) }/>
+                                    </TouchableOpacity>
                                 </View>
                             </TouchableOpacity>
                         )}/>
@@ -290,8 +298,21 @@ const styles = StyleSheet.create({
         borderBottomColor: "#f0f0f0",
         borderBottomWidth: 1
     },
+    noteSearchResultGroup: {
+        flexDirection: "row",
+        alignItems: "stretch",
+        justifyContent: "flex-start",
+    },
     noteSearchResultText: {
-        fontSize: 20
+        fontSize: 20,
+        flex: 1
+    },
+    noteSearchResultRemove: {
+        flex: 0,
+        paddingLeft: getPercent(3),
+        paddingRight: getPercent(3),
+        paddingTop: 5,
+        paddingBottom: 5,
     },
     noteBodyText: {
         paddingLeft: getPercent(3),
