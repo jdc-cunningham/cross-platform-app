@@ -33,9 +33,9 @@ const Notes = () => {
     const [activeNote, setActiveNote] = useState({});
     const [noteSearchResults, setNoteSearchResults] = useState([]);
     const [bodyUpdateTimeout, setBodyUpdateTimeout] = useState(null);
-    const apiNoteSearchPath = "http://192.168.1.188:5000/search-notes";
-    const apiGetNoteBodyPath = "http://192.168.1.188:5000/get-note-body";
-    const apiCreateNotePath = "http://192.168.1.188:5000/save-note";
+    const apiNoteSearchPath = "http://192.168.1.144:5003/search-notes";
+    const apiGetNoteBodyPath = "http://192.168.1.144:5003/get-note-body";
+    const apiCreateNotePath = "http://192.168.1.144:5003/save-note";
     const searchInput = useRef(null);
 
     /**
