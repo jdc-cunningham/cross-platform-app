@@ -49,6 +49,12 @@ const App = () => {
 }
 
 const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        flexDirection: "column",
+        alignItems: "flex-start",
+        justifyContent: "flex-start"
+    },
     defaultModuleText: {
         padding: 5,
         fontSize: 18

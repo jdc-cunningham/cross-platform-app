@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { Text, View, StyleSheet, TextInput, Image, TouchableOpacity, FlatList } from 'react-native';
+import { Text, View, StyleSheet, TextInput, Image, FlatList, TouchableOpacity } from 'react-native';
 import { getPercent } from '../utils/math';
 
 /**
@@ -29,9 +29,10 @@ const Notes = () => {
     const [processing, setProcessing] = useState(false);
     const [searchStr, setSearchStr] = useState("");
     const [titleBtnMode, setTitleBtnMode] = useState("");
-    const [activeNote, setActiveNote] = useState(null);
+    const [activeNote, setActiveNote] = useState({});
     const [noteSearchResults, setNoteSearchResults] = useState([]);
-    const apiSearchPath = "http://192.168.1.188:5000/search-notes";
+    const apiNoteSearchPath = "http://192.168.1.188:5000/search-notes";
+    const apiGetNoteBodyPath = "http://192.168.1.188:5000/get-note-body";
     const searchInput = useRef(null);
 
     /**
@@ -47,7 +48,7 @@ const Notes = () => {
             case "delete":
                 return <Text style={ styles.noteBtnText }>delete</Text>;
             case "processing":
-                return <Image style={ styles.noteBtnLoadingSpinner } source={require('../assets/gifs/ajax-loader--blue.gif')} />
+                return <Image style={ styles.noteBtnLoadingSpinner } source={require('../assets/gifs/ajax-loader--gray.gif')} />
             default:
                 return null;
         }
@@ -81,7 +82,7 @@ const Notes = () => {
 
     const getNote = ( noteTitle ) => {
         postAjax(
-            apiSearchPath,
+            apiNoteSearchPath,
             { "noteQueryStr": noteTitle },
             (data) => {
                 setProcessing(false);
@@ -96,38 +97,56 @@ const Notes = () => {
         )
     }
 
+    // this could have alternate functionality on display like most recent notes
     const noteBody = (() => {
-        switch(!!activeNote) { // forced boolean
-            case activeNote:
-                return <TextInput>{ activeNote.body }</TextInput>
-            default: // show recent notes maybe
-                return <Text></Text>;
+        if (Object.keys(activeNote).length) {
+            return <TextInput style={ styles.noteBodyText } multiline>{ activeNote.body }</TextInput>
+        } else {
+            return <Text></Text>;
         }
     })();
 
     const getNoteBody = ( noteId ) => {
-        console.log('get note body', noteId);
+        setProcessing(true);
+        console.log('gnb', noteId);
+
+        postAjax(
+            apiGetNoteBodyPath,
+            { "noteId": noteId },
+            (data) => {
+                setProcessing(false);
+                const searchResults = JSON.parse(data);
+                console.log('>>>', searchResults);
+                setSearchStr(""); // should be same
+                setNoteSearchResults([]);
+                setActiveNote(searchResults[0]); // a lot of assumptions here
+            }
+        )
     }
     
+    // the weird "MAX(id)" thing below is an artifact from the database schema where I'm selecting the most recent
+    // distinct row with the same column value(note name)
     return (
         <View style={ styles.notesModule }>
             <View style={ styles.noteTitle }>
-                <TextInput
-                    ref={ searchInput }
-                    style={ styles.noteTitleInput }
-                    placeholder="search note"
-                    onChange={ updateNoteBtn }
-                    value={ searchStr }
-                    editable={ processing ? false : true }/>
-                <View style={ styles.noteBtn }>
-                    { getBtn }
+                <View style={ styles.noteSearchWrapper }>
+                    <TextInput
+                        ref={ searchInput }
+                        style={ styles.noteTitleInput }
+                        placeholder="search note"
+                        onChange={ updateNoteBtn }
+                        value={ activeNote ? activeNote.name : searchStr }
+                        editable={ processing ? false : true }/>
+                    <View style={ processing ? styles.noteBtnProcessing : styles.noteBtn }>
+                        { getBtn }
+                    </View>
                 </View>
                 <View style={ !noteSearchResults.length ? styles.displayNone : styles.searchResultsContainer }>
                     <FlatList
                         data={ noteSearchResults }
                         keyExtractor={ item => item.id.toString() }
                         renderItem={ ({ item }) => (
-                            <TouchableOpacity style={ styles.noteSearchResult } onPress={ () => getNoteBody(item.id) }>
+                            <TouchableOpacity style={ styles.noteSearchResult } onPress={ () => getNoteBody(item["MAX(id)"]) }>
                                 <View selectNote={ item.id }>
                                     <Text style={ styles.noteSearchResultText }>{ item.name }</Text>
                                 </View>
@@ -145,16 +164,24 @@ const styles = StyleSheet.create({
         display: "none"
     },
     notesModule: {
-
+        flex: 1,
+        flexDirection: "column",
+        alignItems: "flex-start",
+        justifyContent: "flex-start"
+    },
+    noteSearchWrapper: {
+        alignItems: "stretch",
+        justifyContent: "flex-start",
+        flexDirection: "row",
+        width: getPercent(100),
+        borderBottomWidth: 1,
+        borderBottomColor: '#f0f0f0'
     },
     noteTitle: {
         position: "relative",
-        flexDirection: "row",
-        alignItems: "stretch",
-        justifyContent: "flex-start",
-        borderBottomWidth: 1,
-        borderBottomColor: '#f0f0f0',
-        height: getPercent(10)
+        flexDirection: "column",
+        alignItems: "flex-start",
+        justifyContent: "flex-start"
     },
     noteTitleInput: { 
         flex: 1,
@@ -165,6 +192,11 @@ const styles = StyleSheet.create({
         alignItems: "center",
         justifyContent: "center",
         backgroundColor: "#2a9df4"
+    },
+    noteBtnProcessing: {
+        alignItems: "center",
+        justifyContent: "center",
+        backgroundColor: "white"
     },
     noteBtnText: {
         fontSize: 18,
@@ -177,9 +209,6 @@ const styles = StyleSheet.create({
         marginRight: getPercent(3)
     },
     searchResultsContainer: {
-        position: "absolute",
-        top: getPercent(10),
-        left: 0,
         width: getPercent(100)
     },
     noteSearchResult: {
@@ -188,10 +217,18 @@ const styles = StyleSheet.create({
         paddingRight: getPercent(3),
         paddingTop: 5,
         paddingBottom: 5,
-        width: getPercent(100)
+        width: getPercent(100),
+        borderBottomColor: "#f0f0f0",
+        borderBottomWidth: 1
     },
     noteSearchResultText: {
         fontSize: 18
+    },
+    noteBodyText: {
+        paddingLeft: getPercent(3),
+        paddingRight: getPercent(3),
+        paddingTop: 5,
+        paddingBottom: 5,
     }
 });
 
