@@ -7,7 +7,6 @@ import { getPercent } from '../utils/math';
  * PlainJS AJAX until I can install Axios
  */
 const postAjax = (url, data, success) => {
-    console.log('post ajax fcn');
     var xhr = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject("Microsoft.XMLHTTP");
     xhr.open('POST', url);
     xhr.onreadystatechange = function() {
@@ -63,8 +62,6 @@ const Notes = () => {
         clearTimeout(searchTimeout);
         const { text } = event.nativeEvent; // incoming text
 
-        console.log('search text', text, processing);
-
         if (processing) {
             setSearchStr(searchStr); // don't change value
         } else {
@@ -94,7 +91,6 @@ const Notes = () => {
     const updateNoteBody = ( event ) => {
         clearTimeout(bodyUpdateTimeout);
         const { text } = event.nativeEvent; // incoming text
-        console.log('text', text);
 
         if (processing) {
             setActiveNote(activeNote); // don't change value
@@ -116,7 +112,6 @@ const Notes = () => {
     // the API has no validation so it's possible to create an empty name/empty body
     // second text parameter is from create so it has the most current value eg. not missing last character
     const createNote = ( type, text ) => {
-        console.log('cn', activeNote.body);
         postAjax(
             apiCreateNotePath,
             {
@@ -171,7 +166,6 @@ const Notes = () => {
 
     const getNoteBody = ( noteId ) => {
         setProcessing(true);
-        console.log('gnb', noteId);
 
         postAjax(
             apiGetNoteBodyPath,
@@ -179,16 +173,16 @@ const Notes = () => {
             (data) => {
                 setProcessing(false);
                 const searchResults = JSON.parse(data);
-                console.log('>>>', searchResults);
-                setSearchStr(activeNote.name); // should be same
                 setNoteSearchResults([]);
-                setActiveNote(searchResults[0]); // a lot of assumptions here
+                setActiveNote({
+                    name: searchStr,
+                    body: searchResults[0].body
+                }); // a lot of assumptions here
             }
         )
     }
 
     const handleSearchBtnClick = () => {
-        console.log('click');
         if (titleBtnMode === "create") {
             createNote();
         }
