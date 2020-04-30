@@ -31,8 +31,10 @@ const Notes = () => {
     const [titleBtnMode, setTitleBtnMode] = useState("");
     const [activeNote, setActiveNote] = useState({});
     const [noteSearchResults, setNoteSearchResults] = useState([]);
+    const [bodyUpdateTimeout, setBodyUpdateTimeout] = useState(null);
     const apiNoteSearchPath = "http://192.168.1.188:5000/search-notes";
     const apiGetNoteBodyPath = "http://192.168.1.188:5000/get-note-body";
+    const apiCreateNotePath = "http://192.168.1.188:5000/save-note";
     const searchInput = useRef(null);
 
     /**
@@ -60,9 +62,15 @@ const Notes = () => {
         clearTimeout(searchTimeout);
         const { text } = event.nativeEvent; // incoming text
 
+        console.log('search text', text, processing);
+
         if (processing) {
             setSearchStr(searchStr); // don't change value
         } else {
+            if (Object.keys(activeNote) && text !== activeNote.name) {
+                setActiveNote({});
+            }
+
             setSearchStr(text);
         }
             
@@ -76,7 +84,53 @@ const Notes = () => {
                     setTitleBtnMode("search");
                     setProcessing(false);
                 }
+            }, 500)
+        );
+    }
+
+    
+
+    const updateNoteBody = ( event ) => {
+        clearTimeout(bodyUpdateTimeout);
+        const { text } = event.nativeEvent; // incoming text
+        console.log('text', text);
+
+        if (processing) {
+            setActiveNote(activeNote); // don't change value
+        } else {
+            setActiveNote({
+                name: activeNote.name,
+                body: text
+            });
+        }
+            
+        setBodyUpdateTimeout(
+            setTimeout(() => {
+                setTitleBtnMode("processing"); // this is kind of ugly
+                setProcessing(true);
+                createNote("update", text);
             }, 500));
+    }
+
+    // the API has no validation so it's possible to create an empty name/empty body
+    // second text parameter is from create so it has the most current value eg. not missing last character
+    const createNote = ( type, text ) => {
+        console.log('cn', activeNote.body);
+        postAjax(
+            apiCreateNotePath,
+            {
+                "noteName": searchStr || activeNote.name, // this is actually confusing due to the double use
+                "noteBody": text ? text : ""
+            },
+            (data) => {
+                setProcessing(false);
+                if (data || type === "update") {
+                    setTitleBtnMode("");
+                } else {
+                    setTitleBtnMode("create"); // fails to create
+                }
+            }
+        )
     }
 
 
@@ -99,8 +153,16 @@ const Notes = () => {
 
     // this could have alternate functionality on display like most recent notes
     const noteBody = (() => {
-        if (Object.keys(activeNote).length) {
-            return <TextInput style={ styles.noteBodyText } multiline>{ activeNote.body }</TextInput>
+        const hasActiveNote = Object.keys(activeNote).length;
+        if (hasActiveNote) {
+            return <TextInput
+                multiline
+                placeholder="start typing"
+                style={ styles.noteBodyText }
+                value={ hasActiveNote ? activeNote.body : "" }
+                onChange= { updateNoteBody }
+                editable={ processing ? false : true }>
+            </TextInput>
         } else {
             return <Text></Text>;
         }
@@ -117,11 +179,18 @@ const Notes = () => {
                 setProcessing(false);
                 const searchResults = JSON.parse(data);
                 console.log('>>>', searchResults);
-                setSearchStr(""); // should be same
+                setSearchStr(activeNote.name); // should be same
                 setNoteSearchResults([]);
                 setActiveNote(searchResults[0]); // a lot of assumptions here
             }
         )
+    }
+
+    const handleSearchBtnClick = () => {
+        console.log('click');
+        if (titleBtnMode === "create") {
+            createNote();
+        }
     }
     
     // the weird "MAX(id)" thing below is an artifact from the database schema where I'm selecting the most recent
@@ -135,11 +204,11 @@ const Notes = () => {
                         style={ styles.noteTitleInput }
                         placeholder="search note"
                         onChange={ updateNoteBtn }
-                        value={ activeNote ? activeNote.name : searchStr }
+                        value={ Object.keys(activeNote).length ? activeNote.name : searchStr }
                         editable={ processing ? false : true }/>
-                    <View style={ processing ? styles.noteBtnProcessing : styles.noteBtn }>
+                    <TouchableOpacity style={ processing ? styles.noteBtnProcessing : styles.noteBtn } onPress={ handleSearchBtnClick }>
                         { getBtn }
-                    </View>
+                    </TouchableOpacity>
                 </View>
                 <View style={ !noteSearchResults.length ? styles.displayNone : styles.searchResultsContainer }>
                     <FlatList
@@ -222,13 +291,14 @@ const styles = StyleSheet.create({
         borderBottomWidth: 1
     },
     noteSearchResultText: {
-        fontSize: 18
+        fontSize: 20
     },
     noteBodyText: {
         paddingLeft: getPercent(3),
         paddingRight: getPercent(3),
         paddingTop: 5,
         paddingBottom: 5,
+        minHeight: 18
     }
 });
 
