@@ -4,14 +4,22 @@
         - options
             - [ ] disable/create name first
             - [ ] flex textarea behavior to not do XHR request on non-existent data (harder)
+    - [ ] when creating a new note, empty the active body eg. old app data shows
 - add
     - [ ] when searching, if partial search string doesn't match results, show create button
+    - [ ] delete, red x on results like mobile
 
 ### React Native
 - bugs
     - [ ] issue with search(select result) wrong selected name shown in search
 - add
     - [ ] when searching, if partial search string doesn't match results, show create button
+    - [ ] delete event
 - user experience
     - [ ] fix the focusing problems
     - [ ] fix the focus loss when API updates
+
+### Shared API
+- add
+    - [ ] validation, can actually break server if some fields empty eg. `column null`
+    - [ ] delete method(select by name, delete all rows)
