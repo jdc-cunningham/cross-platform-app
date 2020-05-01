@@ -22,6 +22,12 @@ After that run `npm start` inside the `/desktop/` folder to run the Electron app
 Check `package.json` for the different packager options.
 The executable file(s) will be in `/desktop/release-builds/` per platform you choose.
 
+### Mobile
+This is a React Native app, the apps are generally pretty basic, although built to be dynamic(can add more modules).
+Below is a gif showing the RN app updating the `/shared-api/` and then the Electron app pulling that new value in.
+
+![current React Native app 04/30/2020](./react-native-app-04-29-2020.gif)
+
 ### Attributes
 #### Icons sourced from Flaticon
 * [Doc icon](https://www.flaticon.com/authors/monkik)
