@@ -24,7 +24,7 @@ The executable file(s) will be in `/desktop/release-builds/` per platform you ch
 
 ### Mobile
 This is a React Native app, the apps are generally pretty basic, although built to be dynamic(can add more modules).
-Below is a gif showing the RN app updating the `/shared-api/` and then the Electron app pulling that new value in.
+Below is a gif showing the Electron app updating some note and then the RN app reads the new value. Later RN updates same value and Electron sees it. Both interfaces are using the `/shared-api/` for modifying and storing data.
 
 ![current React Native app 04/30/2020](./react-native-app-04-29-2020.gif)
 
