@@ -5,6 +5,7 @@
             - [ ] disable/create name first
             - [ ] flex textarea behavior to not do XHR request on non-existent data (harder)
     - [ ] when creating a new note, empty the active body eg. old app data shows
+    - [ ] weird bug where you type fast enough in search seems like an empty search goes through, all results appear
 - add
     - [ ] when searching, if partial search string doesn't match results, show create button
     - [ ] delete, red x on results like mobile

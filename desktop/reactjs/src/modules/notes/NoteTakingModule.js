@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
 import './NoteTakingModule.scss';
 import axios from 'axios';
+import redX from './../../assets/icons/svgs/close.svg';
 
 const NoteTakingApp = (props) => {
     const [notesModuleState, setNotesModuleState] = useState({
@@ -8,7 +9,8 @@ const NoteTakingApp = (props) => {
         searchResults: [],
         activeNote: null,
         createMode: false,
-        creatingNote: false
+        creatingNote: false,
+        processing: false
     });
 
     const noteNameInput = useRef(null);
@@ -30,6 +32,7 @@ const NoteTakingApp = (props) => {
     const searchNotesApiPath = notesApiBasePath + '/search-notes';
     const createNoteApiPath = notesApiBasePath + '/save-note';
     const getNoteBodyApiPath = notesApiBasePath + '/get-note-body';
+    const deleteNoteApiPath = notesApiBasePath + '/delete-note';
 
     const searchNotes = () => {
         setNotesModuleState(prev => ({
@@ -105,7 +108,7 @@ const NoteTakingApp = (props) => {
                     searchStr: "",
                     activeNote: {
                         name: notesModuleState.searchStr,
-                        body: noteBodyInput.current.value
+                        body: "" // set to empty value
                     },
                     createMode: false,
                     creatingNote: false
@@ -202,6 +205,49 @@ const NoteTakingApp = (props) => {
         return "";
     }
 
+    const determineNoteBodyText = (() => {
+        if (notesModuleState.activeNote) { 
+            return notesModuleState.activeNote.body;
+        }
+
+        if (notesModuleState.createMode) {
+            return "Create note first, before writing here";
+        }
+
+        return "";
+    })();
+
+    // this delete is primarily by name, but id is provided as well
+    const deleteNote = ( noteId, noteName ) => {
+        setNotesModuleState(prev => ({
+            ...prev,
+            processing: true
+        }));
+
+        axios.post(deleteNoteApiPath, {
+            noteName
+        })
+        .then((res) => {
+            setTimeout(() => {
+                if (res.status === 200) {
+                    console.log('>>', notesModuleState.searchResults);
+                    setNotesModuleState(prev => ({
+                        ...prev,
+                        activeNote: null, // not sure if good or not, if you had a previously active state, what if you deleted it
+                        createMode: false,
+                        searchResults: notesModuleState.searchResults.filter(note => note.name !== noteName),
+                        processing: false
+                    }));
+                } else {
+                    console.log('delete failed'); // this sucks need global modal or something, or subtle error
+                }
+            }, 60000);
+        })
+        .catch((err) => {
+            console.log(err, err.response);
+        });
+    }
+
     return (
         <div className="cpa__module" id="module--note-taking-module">
             <div className={ !notesModuleState.createMode ? "module-notes__header" : "module-notes__header create" }>
@@ -224,9 +270,18 @@ const NoteTakingApp = (props) => {
                             { notesModuleState.searchResults.map(note => (
                                 <div
                                     key={ note.id }
-                                    className="module-notes__search-bar-result"
-                                    // this is an ugly artifact from this SELECT MAX(id) query to get the distinct row but latest version
-                                    onClick={ () => getNoteBody(note['MAX(id)']) }>{ note.name }</div>
+                                    className={ !notesModuleState.processing ? "module-notes__search-bar-result" : "module-notes__search-bar-result processing" }>
+                                        <div
+                                            className="module-notes__search-bar-result-text"
+                                            // this is an ugly artifact from this SELECT MAX(id) query to get the distinct row but latest version
+                                            onClick={ () => getNoteBody(note['MAX(id)']) }>{ note.name }</div>
+                                        <button
+                                            className="module-notes__search-bar-result-remove-btn"
+                                            type="button"
+                                            onClick={ () => deleteNote(note['MAX(id)'], note.name) }>
+                                            <img className="module-notes__search-bar-result-remove-icon" src={ redX } alt="remove note icon" />
+                                        </button>
+                                    </div>
                             )) }
                         </div> }
             </div>
@@ -235,9 +290,9 @@ const NoteTakingApp = (props) => {
                     ref={ noteBodyInput }
                     className="modules-notes__text-area"
                     placeholder="write..."
-                    value={ notesModuleState.activeNote ? notesModuleState.activeNote.body : "" }
+                    value={ determineNoteBodyText }
                     disabled={ notesModuleState.creatingNote }
-                    onChange={ updateNote }></textarea>
+                    onChange={ notesModuleState.createMode ? null : updateNote }></textarea>
             </div>
         </div>
     )

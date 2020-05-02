@@ -34,3 +34,4 @@ Below is a gif showing the Electron app updating some note and then the RN app r
 * [Doc icon](https://www.flaticon.com/authors/monkik)
 * [Pencil icon](https://www.flaticon.com/authors/those-icons)
 * [Plus icon](https://www.flaticon.com/authors/pixel-perfect)
+* [Close icon](https://www.flaticon.com/authors/roundicons)

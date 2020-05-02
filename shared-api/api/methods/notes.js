@@ -105,9 +105,34 @@ const getNoteBody = (req, res) => {
     );
 }
 
+const deleteNote = (req, res) => {
+    if (
+        !Object.keys(req.body).length ||
+        typeof req.body.noteName === "undefined"
+    ) {
+        res.status(400).send('note name is invalid');
+    }
+
+    const noteName = req.body.noteName;
+
+    pool.query(
+        `DELETE FROM notes WHERE name = ?`,
+        [noteName],
+        (err, qres) => { // this is bad res vs. qres
+            if (err) {
+                console.log('failed to delete note', err);
+                res.status(400).send('request failed');
+            } else {
+                res.status(200).json(qres);
+            }
+        }
+    );
+}
+
 module.exports = {
     getNotesCount,
     saveNote,
     searchNotes,
-    getNoteBody
+    getNoteBody,
+    deleteNote
 };

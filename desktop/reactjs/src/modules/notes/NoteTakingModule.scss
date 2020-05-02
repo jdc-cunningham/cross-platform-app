@@ -57,6 +57,9 @@
 }
 
 .module-notes__search-bar-result {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
     cursor: pointer;
     padding: 10px;
 
@@ -64,6 +67,30 @@
         background-color: #2a9df4;
         color: white;
     }
+
+    &.processing {
+        pointer-events: none;
+        opacity: 0.6;
+        cursor: not-allowed; // guess this doesn't work
+    }
+}
+
+.module-notes__search-bar-result-text {
+    flex: 1;
+}
+
+.module-notes__search-bar-result-remove-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: transparent;
+    border: 0;
+    cursor: pointer;
+}
+
+.module-notes__search-bar-result-remove-icon {
+    width: 20px;
+    height: 20px;
 }
 
 .module-notes__body {
