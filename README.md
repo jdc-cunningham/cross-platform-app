@@ -7,6 +7,7 @@ This is the intended functionality at minimum
 ### Technologies
 * **Shared API** - `Node/Express/MySQL`
 * **Desktop** - `Electron/ReactJS`
+* **Mobile** - `React Native`
 
 ### API
 This is the heart of these random connected apps. It is a remote API accessible by all the different apps eg. mobile/desktop/chrome extension. This one is written with `Node/Express/MySQL`. For me I use a VPS from [OVH](https://www.ovh.com/world/) so my API is remote in that it's not on my home network.
