@@ -4,11 +4,10 @@ const electron = require('electron');
 const url = require('url');
 const path = require('path');
 
-const { app, BrowserWindow, Menu, ipcMain } = electron;
+const { app, BrowserWindow, Menu } = electron;
 const macPlatform = process.platform == 'darwin';
 
 let mainWindow;
-let addWindow;
 
 // listen for app to be ready
 app.on('ready', () => {
@@ -34,26 +33,11 @@ app.on('ready', () => {
     Menu.setApplicationMenu(mainMenu);
 });
 
-// catch todo:add from addWindow.html
-ipcMain.on('todoForm:add', (e, item) => {
-    mainWindow.webContents.send('todo:add', item);
-    addWindow.close(); // close small window/form
-});
-
 // create menu template
 const mainMenuTemplate = [
     {
         label: 'File',
         submenu: [
-            {
-                label: 'Add Todo',
-                click() {
-                    createAddWindow();
-                }
-            },
-            {
-                label: 'Clear todos',
-            },
             {
                 label: 'Quit',
                 accelerator: macPlatform ? 'Command+Q' : 'Ctrl+Q',
