@@ -63,7 +63,7 @@ const NoteTakingApp = (props) => {
                         // show results
                         setNotesModuleState(prev => ({
                             ...prev,
-                            createMode: false,
+                            createMode: !!res.data.notes.find(note => note.name !== noteNameInput.current.value), // using ref since onChange is 1 char off
                             searchResults: res.data.notes
                         }));
                     } else {
@@ -230,7 +230,6 @@ const NoteTakingApp = (props) => {
         .then((res) => {
             setTimeout(() => {
                 if (res.status === 200) {
-                    console.log('>>', notesModuleState.searchResults);
                     setNotesModuleState(prev => ({
                         ...prev,
                         activeNote: null, // not sure if good or not, if you had a previously active state, what if you deleted it

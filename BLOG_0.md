@@ -14,4 +14,4 @@ This is interesting, I keep thinking in React Native now I'm like "where is the 
 - [x] feature but desired, delete
     - show icon/delete on click/delete method in API
     - tried to add extra credit, disable cursor, doesn't seem to work on re-render, but does disable row clicks
-- [ ] add option to create entry even if there are results when the searched item doesn't match any results
+- [x] add option to create entry even if there are results when the searched item doesn't match any results
