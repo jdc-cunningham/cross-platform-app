@@ -228,19 +228,17 @@ const NoteTakingApp = (props) => {
             noteName
         })
         .then((res) => {
-            setTimeout(() => {
-                if (res.status === 200) {
-                    setNotesModuleState(prev => ({
-                        ...prev,
-                        activeNote: null, // not sure if good or not, if you had a previously active state, what if you deleted it
-                        createMode: false,
-                        searchResults: notesModuleState.searchResults.filter(note => note.name !== noteName),
-                        processing: false
-                    }));
-                } else {
-                    console.log('delete failed'); // this sucks need global modal or something, or subtle error
-                }
-            }, 60000);
+            if (res.status === 200) {
+                setNotesModuleState(prev => ({
+                    ...prev,
+                    activeNote: null, // not sure if good or not, if you had a previously active state, what if you deleted it
+                    createMode: false,
+                    searchResults: notesModuleState.searchResults.filter(note => note.name !== noteName),
+                    processing: false
+                }));
+            } else {
+                console.log('delete failed'); // this sucks need global modal or something, or subtle error
+            }
         })
         .catch((err) => {
             console.log(err, err.response);
