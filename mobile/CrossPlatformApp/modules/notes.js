@@ -32,10 +32,13 @@ const Notes = () => {
     const [activeNote, setActiveNote] = useState({});
     const [noteSearchResults, setNoteSearchResults] = useState([]);
     const [bodyUpdateTimeout, setBodyUpdateTimeout] = useState(null);
-    const apiNoteSearchPath = "http://192.168.1.144:5003/search-notes";
-    const apiGetNoteBodyPath = "http://192.168.1.144:5003/get-note-body";
-    const apiCreateNotePath = "http://192.168.1.144:5003/save-note";
+    const baseApiPath = "http://192.168.1.144:5003"; // tried using react-native-dotenv couln't get past 500 error about babel, there's no real risk here
+    const apiNoteSearchPath = baseApiPath + "/search-notes";
+    const apiGetNoteBodyPath = baseApiPath + "/get-note-body";
+    const apiCreateNotePath = baseApiPath + "/save-note";
+    const apiDeleteNotePath = baseApiPath + "/delete-note";
     const searchInput = useRef(null);
+    const noteBodyTextInput = useRef(null);
 
     /**
      * There are three modes:
@@ -86,8 +89,6 @@ const Notes = () => {
         );
     }
 
-    
-
     const updateNoteBody = ( event ) => {
         clearTimeout(bodyUpdateTimeout);
         const { text } = event.nativeEvent; // incoming text
@@ -129,7 +130,6 @@ const Notes = () => {
         )
     }
 
-
     const getNote = ( noteTitle ) => {
         postAjax(
             apiNoteSearchPath,
@@ -139,7 +139,9 @@ const Notes = () => {
                 const searchResults = JSON.parse(data);
                 if (searchResults.notes.length) {
                     setNoteSearchResults(searchResults.notes);
-                    setTitleBtnMode("");
+                    searchResults.notes.find(note => note.name === noteTitle)
+                    ? setTitleBtnMode("")
+                    : setTitleBtnMode("create");
                 } else {
                     setTitleBtnMode("create");
                 }
@@ -153,6 +155,7 @@ const Notes = () => {
         if (hasActiveNote) {
             return <TextInput
                 multiline
+                ref={ noteBodyTextInput }
                 placeholder="start typing"
                 style={ styles.noteBodyText }
                 value={ hasActiveNote ? activeNote.body : "" }
@@ -164,7 +167,11 @@ const Notes = () => {
         }
     })();
 
-    const getNoteBody = ( noteId ) => {
+    const getNoteBody = ( noteId, noteName ) => {
+        if (processing) {
+            return; // do nothing
+        }
+
         setProcessing(true);
 
         postAjax(
@@ -175,7 +182,7 @@ const Notes = () => {
                 const searchResults = JSON.parse(data);
                 setNoteSearchResults([]);
                 setActiveNote({
-                    name: searchStr,
+                    name: noteName,
                     body: searchResults[0].body
                 }); // a lot of assumptions here
             }
@@ -188,10 +195,33 @@ const Notes = () => {
         }
     }
 
-    const deleteNote = ( noteId ) => {
-        // need API delete
+    const deleteNote = ( noteId, noteName ) => { // noteId optional
+        if (processing) {
+            return; // do nothing
+        }
+
+        setProcessing(true);
+
+        postAjax(
+            apiDeleteNotePath,
+            { "noteName": noteName }, // not sure if API can use es6, find out
+            (data) => {
+                setProcessing(false);
+                if (data) { // technically no handler for failure
+                    setNoteSearchResults(noteSearchResults.filter(note => note.name !== noteName));
+                }
+            }
+        )
     }
-    
+
+    // helps with typing, since actual text input is smaller than display
+    // tapping in general area focuses text input
+    const focusBody = () => {
+        if (Object.keys(noteBodyTextInput).length && noteBodyTextInput.current) {
+            noteBodyTextInput.current.focus();
+        }
+    }
+
     // the weird "MAX(id)" thing below is an artifact from the database schema where I'm selecting the most recent
     // distinct row with the same column value(note name)
     return (
@@ -214,18 +244,27 @@ const Notes = () => {
                         data={ noteSearchResults }
                         keyExtractor={ item => item.id.toString() }
                         renderItem={ ({ item }) => (
-                            <TouchableOpacity style={ styles.noteSearchResult } onPress={ () => getNoteBody(item["MAX(id)"]) }>
+                            <TouchableOpacity style={ styles.noteSearchResult } onPress={ () => getNoteBody(item["MAX(id)"], item.name) }>
                                 <View style={ styles.noteSearchResultGroup } selectNote={ item.id }>
                                     <Text style={ styles.noteSearchResultText }>{ item.name }</Text>
                                     <TouchableOpacity>
-                                        <Icon style={ styles.noteSearchResultRemove } name="remove" size={ 18 } color="firebrick" onPress={ () => deleteNote(item.id) }/>
+                                        <Icon
+                                            style={ styles.noteSearchResultRemove }
+                                            name="remove"
+                                            size={ 18 }
+                                            color="firebrick"
+                                            onPress={ () => deleteNote(item.id, item.name) }/>
                                     </TouchableOpacity>
                                 </View>
                             </TouchableOpacity>
                         )}/>
                 </View>
             </View>
-            { noteBody }
+            <TouchableOpacity
+                style={ styles.noteBody }
+                onPress={ focusBody }>
+                { noteBody }
+            </TouchableOpacity>
         </View>
     )
 }
@@ -249,6 +288,7 @@ const styles = StyleSheet.create({
         borderBottomColor: '#f0f0f0'
     },
     noteTitle: {
+        flex: 0,
         position: "relative",
         flexDirection: "column",
         alignItems: "flex-start",
@@ -307,6 +347,13 @@ const styles = StyleSheet.create({
         paddingRight: getPercent(3),
         paddingTop: 5,
         paddingBottom: 5,
+    },
+    noteBody: {
+        flex: 1,
+        width: getPercent(100),
+        alignItems: "flex-start",
+        justifyContent: "flex-start",
+        flexDirection: "column"
     },
     noteBodyText: {
         paddingLeft: getPercent(3),

@@ -1,5 +1,6 @@
 ### Desktop
 - bugs
+    - [ ] fix multi entry issue(every keystroke makes a save request due to timeout being improperly implemented)
     - [x] creating a note if you fill in textarea it will crash due to auto-update
         - options
             - [ ] disable/create name first
@@ -12,14 +13,14 @@
     - [x] delete, red x on results like mobile
 
 ### React Native
-- bugs
-    - [ ] issue with search(select result) wrong selected name shown in search
+- bug
+    - [x] issue with search(select result) wrong selected name shown in search
 - add
-    - [ ] when searching, if partial search string doesn't match results, show create button
-    - [ ] delete event
+    - [x] when searching, if partial search string doesn't match results, show create button
+    - [x] delete event
 - user experience
-    - [ ] fix the focusing problems
-    - [ ] fix the focus loss when API updates
+    - [x] fix the focusing problems
+    - [x] fix the focus loss when API updates
 
 ### Shared API
 - add
