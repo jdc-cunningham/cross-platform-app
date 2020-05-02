@@ -10,7 +10,8 @@ const NoteTakingApp = (props) => {
         activeNote: null,
         createMode: false,
         creatingNote: false,
-        processing: false
+        processing: false,
+        noteBodyPlaceholder: "Create note first, before writing here"
     });
 
     const noteNameInput = useRef(null);
@@ -122,13 +123,13 @@ const NoteTakingApp = (props) => {
         });
     }
 
-    const getNoteBody = (noteId) => {
+    const getNoteBody = ( noteId, noteName ) => {
         axios.post(getNoteBodyApiPath, {
             noteId
         })
         .then((res) => { // pointing this out I use both .then and async/await
             if (res.status === 200 && res.data.length) {
-                setActiveNote(res.data[0]);
+                setActiveNote(res.data[0], noteName);
             } else {
                 console.log('failed to retrieve note body');
             }
@@ -142,13 +143,14 @@ const NoteTakingApp = (props) => {
      * Expects object: {name, body} both property values are strings
      * @param {Object} noteData
      */
-    const setActiveNote = (noteData) => {
+    const setActiveNote = ( noteData, noteName ) => {
         setNotesModuleState(prev => ({
             ...prev,
             searchStr: "",
+            createMode: false,
             searchResults: [],
             activeNote: {
-                name: noteData.name,
+                name: noteName,
                 body: noteData.body
             }
         }));
@@ -193,28 +195,14 @@ const NoteTakingApp = (props) => {
         }, 250);
     }
 
-    const getNoteNameValue = () => {
-        if (notesModuleState.searchStr) {
-            return notesModuleState.searchStr;
-        }
-        
-        if (!!notesModuleState.activeNote) {
-            return notesModuleState.activeNote.name;
-        }
-        
-        return "";
-    }
-
     const determineNoteBodyText = (() => {
         if (notesModuleState.activeNote) { 
             return notesModuleState.activeNote.body;
         }
 
         if (notesModuleState.createMode) {
-            return "Create note first, before writing here";
+            return notesModuleState.noteBodyPlaceholder;
         }
-
-        return "";
     })();
 
     // this delete is primarily by name, but id is provided as well
@@ -254,7 +242,7 @@ const NoteTakingApp = (props) => {
                     type="text"
                     placeholder="search note"
                     className="module-notes__search-bar"
-                    value={ getNoteNameValue() }
+                    value={ notesModuleState.searchStr ? notesModuleState.searchStr : (notesModuleState.activeNote  ? notesModuleState.activeNote.name  : "")} // bad nested ternaries
                     disabled={ notesModuleState.creatingNote }/>
                 <button
                     type="button"
@@ -271,7 +259,7 @@ const NoteTakingApp = (props) => {
                                         <div
                                             className="module-notes__search-bar-result-text"
                                             // this is an ugly artifact from this SELECT MAX(id) query to get the distinct row but latest version
-                                            onClick={ () => getNoteBody(note['MAX(id)']) }>{ note.name }</div>
+                                            onClick={ () => getNoteBody(note['MAX(id)'], note.name) }>{ note.name }</div>
                                         <button
                                             className="module-notes__search-bar-result-remove-btn"
                                             type="button"
