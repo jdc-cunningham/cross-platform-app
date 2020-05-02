@@ -241,6 +241,7 @@ const Notes = () => {
                 </View>
                 <View style={ !noteSearchResults.length ? styles.displayNone : styles.searchResultsContainer }>
                     <FlatList
+                        keyboardShouldPersistTaps="always"
                         data={ noteSearchResults }
                         keyExtractor={ item => item.id.toString() }
                         renderItem={ ({ item }) => (

@@ -7,7 +7,8 @@
             - [ ] flex textarea behavior to not do XHR request on non-existent data (harder)
             - [x] change text output behavior to show text/ignore `onChange`
     - [x] when creating a new note, empty the active body eg. old app data shows
-    - [ ] weird bug where you type fast enough in search seems like an empty search goes through, all results appear
+    - [x] weird bug where you type fast enough in search seems like an empty search goes through, all results appear
+        - fixed with prop `keyboardShouldPersistTaps`
 - add
     - [x] when searching, if partial search string doesn't match results, show create button
     - [x] delete, red x on results like mobile
@@ -15,6 +16,7 @@
 ### React Native
 - bug
     - [x] issue with search(select result) wrong selected name shown in search
+    - [ ] weird first tap issue on results, looks like happens when an input is focused
 - add
     - [x] when searching, if partial search string doesn't match results, show create button
     - [x] delete event
