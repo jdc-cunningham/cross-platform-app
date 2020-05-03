@@ -11,7 +11,9 @@ const NoteTakingApp = (props) => {
         createMode: false,
         creatingNote: false,
         processing: false,
-        noteBodyPlaceholder: "Create note first, before writing here"
+        noteBodyPlaceholder: "Create note first, before writing here",
+        searchApiTimeout: null,
+        updateNoteTimeout: null
     });
 
     const noteNameInput = useRef(null);
@@ -26,7 +28,6 @@ const NoteTakingApp = (props) => {
      * the UI is using absolute positioning for items that dynamically appear eg. the create button/result rows
      */
 
-    let searchApiTimeout;
     const notesApiBasePath = window.location.href.indexOf('localhost') !== -1 // this should use production flag
         ? process.env.REACT_APP_SEARCH_API_BASE_PATH_DEV
         : process.env.REACT_APP_SEARCH_API_BASE_PATH;
@@ -36,6 +37,8 @@ const NoteTakingApp = (props) => {
     const deleteNoteApiPath = notesApiBasePath + '/delete-note';
 
     const searchNotes = () => {
+        let searchApiTimeout = notesModuleState.searchApiTimeout;
+
         setNotesModuleState(prev => ({
             ...prev,
             searchStr: noteNameInput.current.value
@@ -83,6 +86,11 @@ const NoteTakingApp = (props) => {
                 console.log(err, err.response);
             });
         }, 250);
+
+        setNotesModuleState(prev => ({
+            ...prev,
+            searchApiTimeout
+        }));
     }
 
     const createNote = () => {
@@ -156,8 +164,9 @@ const NoteTakingApp = (props) => {
         }));
     }
 
-    let updateNoteTimeout;
     const updateNote = () => {
+        let updateNoteTimeout = notesModuleState.updateNoteTimeout;
+
         clearTimeout(updateNoteTimeout);
         setNotesModuleState(prev => ({
             ...prev,
@@ -193,6 +202,11 @@ const NoteTakingApp = (props) => {
                 console.log(err, err.response);
             });
         }, 250);
+
+        setNotesModuleState(prev => ({
+            ...prev,
+            updateNoteTimeout
+        }));
     }
 
     const determineNoteBodyText = (() => {
