@@ -15,6 +15,8 @@
 
 ### React Native
 - bug
+    - [ ] fix issue of too fast timeout while typing in body
+    - [ ] focus the input back after API syncs
     - [x] issue with search(select result) wrong selected name shown in search
     - [ ] weird first tap issue on results, looks like happens when an input is focused
         - put a fix in, check on next rebuild
