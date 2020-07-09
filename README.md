@@ -29,6 +29,18 @@ Below is a gif showing the Electron app updating some note and then the RN app r
 
 ![current React Native app 04/30/2020](./react-native-app-04-29-2020.gif)
 
+### Installation/deployment
+#### Mac desktop app - assumes API exists
+
+- `cd` into `desktop/reactjs`, make a `.env` file from the `.env.example` file then edit the `.env` file, update the `...API_BASE_PATH` (depends on deployed API), can run local API as well and use `localhost`
+- build the `reactjs` app by running `npm install, npm run build`
+- go up one directory eg. `cd ..` so you're in the desktop folder directory
+- run `npm install` to install Electron then run `npm run package-os` check `package.json` for the platform
+- you should see a builds `release-builds` folder appear, open that in finder, find the folder with `darwin` in the name, inside is a `desktop.app` file can double click on that to launch the app on Mac.
+
+### Bugs
+- mac - there is a menu error on launch, doesn't prevent app from working though
+
 ### Attributes
 #### Icons sourced from Flaticon
 * [Doc icon](https://www.flaticon.com/authors/monkik)

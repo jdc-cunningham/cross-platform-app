@@ -5,3 +5,6 @@
 # folders
 node_modules/
 release-builds/
+
+# mac
+.DS_Store
