@@ -40,6 +40,9 @@ Below is a gif showing the Electron app updating some note and then the RN app r
 
 ### Bugs
 - mac - there is a menu error on launch, doesn't prevent app from working though
+- android RN app - possibly slow/causes UI freeze, it partially works but stopped using in the mean time
+  - I think my phone is just old/piece of crap, as even without this app the UI can still freeze(eg. while typing an sms message)
+  - there was some bug though about an event not being unmounted/unregistered or something like that
 
 ### Attributes
 #### Icons sourced from Flaticon
