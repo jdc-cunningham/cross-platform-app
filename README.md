@@ -38,6 +38,11 @@ Below is a gif showing the Electron app updating some note and then the RN app r
 - run `npm install` to install Electron then run `npm run package-os` check `package.json` for the platform
 - you should see a builds `release-builds` folder appear, open that in finder, find the folder with `darwin` in the name, inside is a `desktop.app` file can double click on that to launch the app on Mac.
 
+### Other features (future)
+- Chrome extension primarily for lazily grabbing all the open tabs while building something
+  - show a list of links
+- rework UI to group entries in cards/by date
+
 ### Bugs
 - mac - there is a menu error on launch, doesn't prevent app from working though
 - android RN app - possibly slow/causes UI freeze, it partially works but stopped using in the mean time
