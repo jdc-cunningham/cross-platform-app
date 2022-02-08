@@ -1,3 +1,6 @@
+### Note
+There is no max check/text body cap. I just realized this and I may be losing data. The body is long though it uses longtext. But depending on how MySQL is running it may silently auto-truncate for you vs. fail for being too long.
+
 ### About
 This is a cross-platform note-taking app primarily along with some other "sub-apps" or "modules" sprinkled in eg. a canvas drawing tool that can be saved.
 
