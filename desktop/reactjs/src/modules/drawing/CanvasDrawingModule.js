@@ -1,5 +1,5 @@
 import React from 'react';
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import './CanvasDrawingModule.scss';
 
 const CanvasDrawingModule = (props) => {
@@ -19,7 +19,11 @@ const CanvasDrawingModule = (props) => {
     let h = 0;
     
     function init() {
+        const container = document.querySelector('.cpa__app-window');
+
         canvas = document.getElementById('can');
+        canvas.width = container.clientWidth - 10; // 10 is padding left
+        canvas.height = container.clientHeight;
         ctx = canvas.getContext("2d");
         w = canvas.width;
         h = canvas.height;
@@ -128,7 +132,7 @@ const CanvasDrawingModule = (props) => {
     }, [])
 
     return <div className="cpa__module" id="module--canvas-drawing">
-        <canvas id="can" width="400" height="400" style={{position: 'absolute', top: '10%', left: '10%', border: '2px solid'}}></canvas>
+        <canvas id="can" width="400" height="400" style={{border: '2px solid'}}></canvas>
         {/* <div style="position:absolute;top:12%;left:43%;">Choose Color</div>
         <div style="position:absolute;top:15%;left:45%;width:10px;height:10px;background:green;" id="green" onClick="color(this)"></div>
         <div style="position:absolute;top:15%;left:46%;width:10px;height:10px;background:blue;" id="blue" onClick="color(this)"></div>
