@@ -1,13 +1,5 @@
 require('dotenv').config();
-const { pool } = require('./../utils/dbConnect');
-
-// connect to mysql, assumes above works eg. mysql is running/credentials exist
-pool.connect((err) => {
-    if (err) {
-        console.error('error connecting: ' + err.stack);
-        return;
-    }
-});
+const { pool } = require('./../api/utils/dbConnect');
 
 // check if database exists, if not create it
 pool.query('CREATE DATABASE IF NOT EXISTS `cross_platform_app`', (error, results, fields) => {
