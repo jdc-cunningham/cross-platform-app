@@ -28,3 +28,20 @@ ytf `dotenv`can't be found when installed with package json
 
 man this folder setup is f'd
 
+6:01 PM
+
+his freaking tail keeps going over my mouse
+
+<img src="./devlog_images/cat-tail.JPG"/>
+
+6:04 PM
+
+ugh... the deployed folder structure doesn't match this code ahh well
+
+6:05 PM
+
+pool is closed, oh no, I wanted to swim (ha)
+
+6:08 PM
+
+going to go back to what I had

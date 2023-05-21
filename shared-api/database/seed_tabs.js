@@ -1,8 +1,22 @@
 require('dotenv').config();
-const { pool } = require('./../api/utils/dbConnect');
+const mysql = require('mysql2');
+
+const connection = mysql.createConnection({
+    host: 'localhost',
+    user: process.env.DB_USER,
+    password: process.env.DB_PASS
+});
+
+// connect to mysql, assumes above works eg. mysql is running/credentials exist
+connection.connect((err) => {
+    if (err) {
+        console.error('error connecting: ' + err.stack);
+        return;
+    }
+});
 
 // check if database exists, if not create it
-pool.query('CREATE DATABASE IF NOT EXISTS `cross_platform_app`', (error, results, fields) => {
+connection.query('CREATE DATABASE IF NOT EXISTS `cross_platform_app`', (error, results, fields) => {
     if (error) {
         console.log('error checking if cross_platform_app database exists:', error.sqlMessage);
         return;
@@ -10,7 +24,7 @@ pool.query('CREATE DATABASE IF NOT EXISTS `cross_platform_app`', (error, results
 });
 
 // use the database
-pool.query('USE cross_platform_app', (error, results, fields) => {
+connection.query('USE cross_platform_app', (error, results, fields) => {
     if (error) {
         console.log('an error occurred trying to use the cross_platform_app database', error);
         return;
@@ -19,7 +33,7 @@ pool.query('USE cross_platform_app', (error, results, fields) => {
 
 // build the various tables and their schemas, stole these straight out of phpmyadmin ha
 // users
-pool.query(
+connection.query(
     'CREATE TABLE `save_tabs` (' +
         '`id` int(11) NOT NULL AUTO_INCREMENT,' +
         '`topics` varchar(2083) COLLATE utf8_unicode_ci NOT NULL,' + // this is max url length not related just a number
@@ -35,4 +49,4 @@ pool.query(
     }
 )
 
-pool.end();
+connection.end();
