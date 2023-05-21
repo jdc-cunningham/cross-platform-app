@@ -1,0 +1,110 @@
+.module-notes__header, .module-notes__body {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+.module-notes__header {
+    flex: 0;
+
+    &.create {
+        .module-notes__search-bar-create-btn {
+            display: block;
+        }
+    }
+}
+
+.module-notes__header input {
+    width: 100%;
+    font-size: 18px;
+    padding: 10px;
+}
+
+.module-notes__search-bar-create-btn {
+    position: absolute;
+    top: 50%;
+    right: 0;
+    transform: translateY(-50%); // center vertically
+    display: none;
+    background-color: #2a9df4;
+    color: white;
+    border: 0;
+    border-radius: 5px;
+    font-size: 1rem;
+    padding: 5px 10px;
+    cursor: pointer;
+    margin-right: 10px;
+
+    &:hover {
+        background-color: #187bcd;
+    }
+}
+
+.module-notes__search-bar-results {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    display: block;
+    overflow-y: auto;
+    max-height: 50vh;
+    z-index: 1;
+    background-color: white;
+    border: 1px solid #808080;
+    border-top: 0;
+}
+
+.module-notes__search-bar-result {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    cursor: pointer;
+    padding: 10px;
+
+    &:hover {
+        background-color: #2a9df4;
+        color: white;
+    }
+
+    &.processing {
+        pointer-events: none;
+        opacity: 0.6;
+        cursor: not-allowed; // guess this doesn't work
+    }
+}
+
+.module-notes__search-bar-result-text {
+    flex: 1;
+}
+
+.module-notes__search-bar-result-remove-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: transparent;
+    border: 0;
+    cursor: pointer;
+}
+
+.module-notes__search-bar-result-remove-icon {
+    width: 20px;
+    height: 20px;
+}
+
+.module-notes__body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    margin-top: 10px;
+}
+
+.module-notes__body textarea {
+    width: 100%;
+    height: 100%;
+    font-size: 18px;
+    padding: 10px;
+    overflow-y: auto;
+}
