@@ -135,4 +135,4 @@ module.exports = {
     searchNotes,
     getNoteBody,
     deleteNote
-};
+}
