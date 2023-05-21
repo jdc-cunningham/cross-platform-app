@@ -18,7 +18,7 @@ const saveTabs = (req, res) => {
 
   // since there isn't a search to update, created_at/updated_at is kind of redundant
   pool.query(
-    `INSERT INTO notes SET topics = ?, tabs = ?, date_added = ?`,
+    `INSERT INTO save_tabs SET topics = ?, tabs = ?, date_added = ?`,
     [topics, tabs, now],
     (err, qres) => {
       if (err) {

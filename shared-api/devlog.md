@@ -45,3 +45,7 @@ pool is closed, oh no, I wanted to swim (ha)
 6:08 PM
 
 going to go back to what I had
+
+6:26 PM
+
+okay this API endpoint update is done... moving back to the extension
