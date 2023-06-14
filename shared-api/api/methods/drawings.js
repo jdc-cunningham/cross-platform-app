@@ -1,11 +1,11 @@
-// browser tabs
+// html5 canvas drawing
 
 require('dotenv').config();
 const { pool } = require('./../utils/dbConnect');
 const { getDateTime, formatTimeStr } = require('./../utils/time');
 
-const saveTabs = (req, res) => {
-  const { topics, tabs } = req.body;
+const saveDrawing = (req, res) => {
+  const { topics, drawing } = req.body;
 
   if (
     !Object.keys(req.body).length ||
@@ -19,7 +19,7 @@ const saveTabs = (req, res) => {
   // since there isn't a search to update, created_at/updated_at is kind of redundant
   pool.query(
     `INSERT INTO canvas_drawings SET topics = ?, drawing = ?, date_added = ?`,
-    [topics, tabs, now],
+    [topics, drawing, now],
     (err, qres) => {
       if (err) {
         console.log('failed to save drawing', err);
@@ -32,5 +32,5 @@ const saveTabs = (req, res) => {
 }
 
 module.exports = {
-  saveTabs
+  saveDrawing
 }

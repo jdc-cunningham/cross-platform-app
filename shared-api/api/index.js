@@ -8,6 +8,7 @@ const app = express();
 const port = 5000;
 const { getNotesCount, saveNote, searchNotes, getNoteBody, deleteNote } = require('./methods/notes');
 const { saveTabs } = require('./methods/tabs');
+const { saveDrawing } = require('./methods/drawings');
 
 // CORs
 app.use((req, res, next) => {
@@ -30,6 +31,7 @@ app.post('/search-notes', searchNotes);
 app.post('/get-note-body', getNoteBody);
 app.post('/delete-note', deleteNote);
 app.post('/save-tabs', saveTabs);
+app.post('/save-drawing', saveDrawing)
 
 app.listen(port, () => {
     console.log(`App running... on port ${port}`);
