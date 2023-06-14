@@ -36,6 +36,7 @@ connection.query('USE cross_platform_app', (error, results, fields) => {
 connection.query(
     'CREATE TABLE `canvas_drawings` (' +
         '`id` int(11) NOT NULL AUTO_INCREMENT,' +
+        '`name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,' +
         '`topics` varchar(2083) COLLATE utf8_unicode_ci NOT NULL,' + // this is max url length not related just a number
         '`drawing` text NOT NULL,' +
         '`date_added` datetime NOT NULL,' +

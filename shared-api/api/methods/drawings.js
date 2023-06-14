@@ -8,8 +8,7 @@ const saveDrawing = (req, res) => {
   const { topics, drawing } = req.body;
 
   if (
-    !Object.keys(req.body).length ||
-    typeof tabs === "undefined"
+    !Object.keys(req.body).length
   ) {
     res.status(400).send('please make sure all fields are filled in');
   }
@@ -19,7 +18,7 @@ const saveDrawing = (req, res) => {
   // since there isn't a search to update, created_at/updated_at is kind of redundant
   pool.query(
     `INSERT INTO canvas_drawings SET topics = ?, drawing = ?, date_added = ?`,
-    [topics, drawing, now],
+    [name, topics, drawing, now],
     (err, qres) => {
       if (err) {
         console.log('failed to save drawing', err);
@@ -31,6 +30,31 @@ const saveDrawing = (req, res) => {
   );
 }
 
+const searchDrawing = (req, res) => {
+  const { name, topic } = req.body;
+
+  if (
+    !Object.keys(req.body).length
+  ) {
+    res.status(400).send('please make sure all fields are filled in');
+  }
+
+  pool.query(
+    `SELECT drawing FROM canvas_drawings WHERE ? LIKE %name% OR ? in topics`,
+    [name, topic],
+    (err, qres) => {
+      if (err) {
+        console.log('failed to search drawing', err);
+        res.status(400).send('failed to searc drawing');
+      } else {
+        res.status(200).send({drawings: qres}); // don't check if it was actually made
+      }
+    }
+  );
+}
+
 module.exports = {
-  saveDrawing
+  saveDrawing,
+  searchDrawing,
+  getDrawing
 }
