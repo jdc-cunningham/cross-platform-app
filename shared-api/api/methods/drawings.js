@@ -5,7 +5,7 @@ const { pool } = require('./../utils/dbConnect');
 const { getDateTime, formatTimeStr } = require('./../utils/time');
 
 const saveDrawing = (req, res) => {
-  const { topics, drawing } = req.body;
+  const { name, topics, drawing } = req.body;
 
   if (
     !Object.keys(req.body).length
@@ -17,7 +17,7 @@ const saveDrawing = (req, res) => {
 
   // since there isn't a search to update, created_at/updated_at is kind of redundant
   pool.query(
-    `INSERT INTO canvas_drawings SET topics = ?, drawing = ?, date_added = ?`,
+    `INSERT INTO canvas_drawings SET name = ?, topics = ?, drawing = ?, date_added = ?`,
     [name, topics, drawing, now],
     (err, qres) => {
       if (err) {
@@ -33,6 +33,8 @@ const saveDrawing = (req, res) => {
 const searchDrawing = (req, res) => {
   const { name, topic } = req.body;
 
+  // sending an empty payload returns all
+
   if (
     !Object.keys(req.body).length
   ) {
@@ -40,14 +42,37 @@ const searchDrawing = (req, res) => {
   }
 
   pool.query(
-    `SELECT drawing FROM canvas_drawings WHERE ? LIKE %name% OR ? in topics`,
-    [name, topic],
+    `SELECT id, name FROM canvas_drawings WHERE name LIKE ? OR topics LIKE ?`, // not correct way to search against comma list
+    ['%' + name + '%', '%' + topic + '%'],
     (err, qres) => {
       if (err) {
         console.log('failed to search drawing', err);
-        res.status(400).send('failed to searc drawing');
+        res.status(400).send('failed to search drawing');
       } else {
         res.status(200).send({drawings: qres}); // don't check if it was actually made
+      }
+    }
+  );
+}
+
+const getDrawing = (req, res) => {
+  const { id } = req.body;
+
+  if (
+    !Object.keys(req.body).length
+  ) {
+    res.status(400).send('please make sure all fields are filled in');
+  }
+
+  pool.query(
+    `SELECT drawing FROM canvas_drawings WHERE id = ?`,
+    [id],
+    (err, qres) => {
+      if (err) {
+        console.log('failed to get drawing', err);
+        res.status(400).send('failed to get drawing');
+      } else {
+        res.status(200).send(qres); // don't check if it was actually made
       }
     }
   );
