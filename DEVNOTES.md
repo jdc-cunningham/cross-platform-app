@@ -34,3 +34,11 @@ oh dang, when you load an image, have to clear existing canvas first
 nice fixed the offset
 
 I gotta rebuild this for my SG 4K chromebook
+
+6:51 PM
+
+cool it's working
+
+<img src="./sgc-4k.JPG"/>
+
+Can see pressure working, this is a desktop app made for Linux (Manjaro Arch)
