@@ -32,3 +32,5 @@ oh dang, when you load an image, have to clear existing canvas first
 6:39 PM
 
 nice fixed the offset
+
+I gotta rebuild this for my SG 4K chromebook
