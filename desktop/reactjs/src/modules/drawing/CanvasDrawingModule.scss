@@ -1,0 +1,142 @@
+.canvas-drawing-module {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+}
+
+.canvas-drawing-module__header {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-direction: row;
+  background-color: #505050;
+  padding: 0.5rem;
+  width: 100%;
+
+  h2 {
+    font-size: 1.5rem;
+    color: white;
+  }
+}
+
+.canvas-drawing-module__header-toggle-menu-btn {
+  font-size: 1.25rem;
+  cursor: pointer;
+}
+
+.canvas-drawing-module__clear-btn {
+  position: absolute;
+  top: 58px;
+  left: 0.5rem;
+  background-color: transparent;
+  border: 0;
+  cursor: pointer;
+
+  img {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+}
+
+.canvas-drawing-module__active-color {
+  display: none;
+  position: absolute;
+  top: 58px;
+  left: 3rem;
+  width: 1.5rem;
+  height: 1.5rem;
+  background-color: black;
+  border: solid 1px #282828;
+  cursor: pointer;
+
+  &.open {
+    display: block;
+  }
+
+  &.black {
+    background-color: black;
+  }
+
+  &.white {
+    background-color: white;
+  }
+
+  &.red {
+    background-color: red;
+  }
+
+  &.blue {
+    background-color: blue;
+  }
+
+  &.green {
+    background-color: green;
+  }
+
+  &.gray {
+    background-color: gray;
+  }
+}
+
+.canvas-drawing-module__colors {
+  display: none;
+  position: absolute;
+  top: calc(58px - 0.25rem);
+  left: calc(3rem - 0.25rem);
+  width: auto;
+  height: auto;
+
+  &.open {
+    display: flex;
+  }
+}
+
+.canvas-drawing-module__colors-container {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.canvas-drawing-module__color {
+  width: 1.5rem;
+  height: 1.5rem;
+  margin: 0.25rem;
+  border: 1px solid #282828;
+  cursor: pointer;
+
+  &.black {
+    background-color: black;
+  }
+
+  &.white {
+    background-color: white;
+  }
+
+  &.red {
+    background-color: red;
+  }
+
+  &.blue {
+    background-color: blue;
+  }
+
+  &.green {
+    background-color: green;
+  }
+
+  &.gray {
+    background-color: gray;
+  }
+}
+
+#canvas {
+  margin: 0.25rem;
+  border: 1px solid #505050;
+}
