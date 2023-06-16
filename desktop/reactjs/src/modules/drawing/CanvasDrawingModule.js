@@ -94,8 +94,17 @@ const CanvasDrawingModule = (props) => {
 		const header = document.querySelector('.canvas-drawing-module__header');
 
 		canvas = document.getElementById('canvas');
+		const oldData = canvas.toDataUrl();
 		canvas.width = container.clientWidth - 10; // scrollbar
 		canvas.height = container.clientHeight - header.offsetHeight - 10;
+
+		let image = new Image();
+    
+		image.onload = function() {
+			canvas.getContext("2d").drawImage(image, 0, 0);
+		};
+
+		image.src = oldData;
 	}
 
 	const init = () => {
