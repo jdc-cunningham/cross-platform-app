@@ -30,7 +30,6 @@ const CanvasDrawingModule = (props) => {
 	let currX = 0;
 	let prevY = 0;
 	let currY = 0;
-	let dot_flag = false;
 	var y = 2;
 
 	const colors = [
@@ -173,7 +172,6 @@ const CanvasDrawingModule = (props) => {
 			currY = e.clientY - canvas.offsetTop - 10;
 
 			flag = true;
-			dot_flag = true;
 		}
 
 		if (res === 'up' || res === "out") {
