@@ -51,9 +51,9 @@ const closeMenu = (setMenuOpen, setSearchTerm, setTags) => {
   setMenuOpen(false);
 }
 
-const loadDrawing = (apiGetDrawingPath, drawingId, canvas, setMenuOpen, setSearchTerm, setTags, erase) => {
+const loadDrawing = (apiGetDrawingPath, drawing, canvas, setMenuOpen, setSearchTerm, setTags, erase, setActiveDrawing) => {
   axios.post(apiGetDrawingPath, {
-    id: drawingId
+    id: drawing.id
   }).then((res) => {
     if (res.status === 200) {
       if (res.data.length) {
@@ -67,6 +67,7 @@ const loadDrawing = (apiGetDrawingPath, drawingId, canvas, setMenuOpen, setSearc
         };
 
         image.src = res.data[0].drawing;
+        setActiveDrawing(drawing)
         closeMenu(setMenuOpen, setSearchTerm, setTags);
       }
     } else {
@@ -76,7 +77,7 @@ const loadDrawing = (apiGetDrawingPath, drawingId, canvas, setMenuOpen, setSearc
 }
 
 const DrawingMenu = (props) => {
-  const { menuOpen, setMenuOpen, drawing, setActiveDrawing, canvas, setSavingState, erase, triggerSave, setTriggerSave } = props;
+  const { menuOpen, setMenuOpen, setActiveDrawing, canvas, setSavingState, erase, triggerSave, setTriggerSave } = props;
 
   const baseApi = 'http://192.168.1.144:5003';
   const apiSavePath = `${baseApi}/save-drawing`;
@@ -124,7 +125,7 @@ const DrawingMenu = (props) => {
           <div
             key={index}
             className="DrawingMenu__search-result"
-            onClick={() => loadDrawing(apiGetDrawingPath, searchResult.id, canvas, setMenuOpen, setSearchTerm, setTags, erase)}
+            onClick={() => loadDrawing(apiGetDrawingPath, searchResult, canvas, setMenuOpen, setSearchTerm, setTags, erase, setActiveDrawing)}
           >{searchResult.name}</div>
         )}
       </div>
