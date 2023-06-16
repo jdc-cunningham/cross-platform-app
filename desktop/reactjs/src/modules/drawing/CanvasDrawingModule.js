@@ -174,13 +174,6 @@ const CanvasDrawingModule = (props) => {
 
 			flag = true;
 			dot_flag = true;
-
-			if (dot_flag) {
-				ctx.beginPath();
-				ctx.fillRect(currX, currY, 2, 2);
-				ctx.closePath();
-				dot_flag = false;
-			}
 		}
 
 		if (res === 'up' || res === "out") {
