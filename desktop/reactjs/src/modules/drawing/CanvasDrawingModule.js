@@ -2,7 +2,7 @@ import React from 'react';
 import { useState, useEffect } from 'react';
 import './CanvasDrawingModule.scss';
 import Pressure from 'pressure';
-import RedX from '../../assets/icons/uxwing_close-icon.svg';
+import RedX from './assets/icons/uxwing_close-icon.svg';
 import DrawingMenu from './components/drawing-menu/DrawingMenu';
 
 const CanvasDrawingModule = (props) => {
@@ -149,8 +149,8 @@ const CanvasDrawingModule = (props) => {
 		if (res === 'down') {
 			prevX = currX;
 			prevY = currY;
-			currX = e.clientX - canvas.offsetLeft;
-			currY = e.clientY - canvas.offsetTop;
+			currX = e.clientX - canvas.offsetLeft - 90;
+			currY = e.clientY - canvas.offsetTop - 10;
 
 			flag = true;
 			dot_flag = true;
@@ -171,8 +171,8 @@ const CanvasDrawingModule = (props) => {
 			if (flag) {
 				prevX = currX;
 				prevY = currY;
-				currX = e.clientX - canvas.offsetLeft;
-				currY = e.clientY - canvas.offsetTop;
+				currX = e.clientX - canvas.offsetLeft - 90;
+				currY = e.clientY - canvas.offsetTop - 10;
 				draw();
 			}
 		}
