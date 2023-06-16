@@ -4,7 +4,23 @@ require('dotenv').config();
 const { pool } = require('./../utils/dbConnect');
 const { getDateTime, formatTimeStr } = require('./../utils/time');
 
-const saveDrawing = (req, res) => {
+const findDrawing = (drawingName) => {
+  return new Promise(resolve => {
+    pool.query(
+      `SELECT id FROM canvas_drawings WHERE name = ?`,
+      [drawingName],
+      (err, qres) => {
+        if (err) {
+          resolve([]);
+        } else {
+          resolve(qres);
+        }
+      }
+    );
+  });
+}
+
+const saveDrawing = async (req, res) => {
   const { name, topics, drawing } = req.body;
 
   if (
@@ -14,20 +30,36 @@ const saveDrawing = (req, res) => {
   }
 
   const now = formatTimeStr(getDateTime());
+  const existingDrawing = await findDrawing(name);
 
   // since there isn't a search to update, created_at/updated_at is kind of redundant
-  pool.query(
-    `INSERT INTO canvas_drawings SET name = ?, topics = ?, drawing = ?, date_added = ?`,
-    [name, topics, drawing, now],
-    (err, qres) => {
-      if (err) {
-        console.log('failed to save drawing', err);
-        res.status(400).send('failed to save drawing');
-      } else {
-        res.status(200).send(`drawing saved`); // don't check if it was actually made
+  if (existingDrawing.length) {
+    pool.query(
+      `UPDATE canvas_drawings SET topics = ?, drawing = ? WHERE id = ?`,
+      [topics, drawing, existingDrawing[0].id],
+      (err, qres) => {
+        if (err) {
+          console.log('failed to save drawing', err);
+          res.status(400).send('failed to save drawing');
+        } else {
+          res.status(200).send(`drawing saved`); // don't check if it was actually made
+        }
       }
-    }
-  );
+    );
+  } else {
+    pool.query(
+      `INSERT INTO canvas_drawings SET name = ?, topics = ?, drawing = ?, date_added = ?`,
+      [name, topics, drawing, now],
+      (err, qres) => {
+        if (err) {
+          console.log('failed to save drawing', err);
+          res.status(400).send('failed to save drawing');
+        } else {
+          res.status(200).send(`drawing saved`); // don't check if it was actually made
+        }
+      }
+    );
+  }
 }
 
 const searchDrawing = (req, res) => {
