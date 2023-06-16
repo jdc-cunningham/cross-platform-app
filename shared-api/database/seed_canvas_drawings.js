@@ -38,7 +38,7 @@ connection.query(
         '`id` int(11) NOT NULL AUTO_INCREMENT,' +
         '`name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,' +
         '`topics` varchar(2083) COLLATE utf8_unicode_ci NOT NULL,' + // this is max url length not related just a number
-        '`drawing` text NOT NULL,' +
+        '`drawing` longtext NOT NULL,' +
         '`date_added` datetime NOT NULL,' +
         'PRIMARY KEY (`id`)' +
        ') ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci',
