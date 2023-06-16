@@ -61,6 +61,10 @@ otherwise will settle for fixed stroke size
 
 oh man that fixed it... who knew going from v8 to v25 would add new things lol
 
+2:42 AM
+
+ahh... I gotta get rid of those first contact dots...
+
 ---
 
 06/15/2023
