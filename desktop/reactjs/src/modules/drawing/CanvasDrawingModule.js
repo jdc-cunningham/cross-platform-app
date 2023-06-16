@@ -9,7 +9,7 @@ const CanvasDrawingModule = (props) => {
 	const [menuOpen, setMenuOpen] = useState(false);
 	const [activeDrawing, setActiveDrawing] = useState({
 		name: 'Drawing title',
-		id: 0,
+		id: -1,
 		topics: '',
 	});
 	const [color, setColor] = useState('');
@@ -107,6 +107,12 @@ const CanvasDrawingModule = (props) => {
 		image.src = oldData;
 	}
 
+	const isCanvasBlank = () => {
+		return !getCanvas().getContext('2d')
+			.getImageData(0, 0, canvas.width, canvas.height).data
+			.some(channel => channel !== 0);
+	}
+
 	const init = () => {
 		const container = document.querySelector('.cpa__app-window');
 		const header = document.querySelector('.canvas-drawing-module__header');
@@ -126,7 +132,12 @@ const CanvasDrawingModule = (props) => {
 
 		canvas.addEventListener("mouseup", function (e) {
 			findxy('up', e)
-			setTriggerSave(true);
+
+			console.log('up', savingState, activeDrawing.id);
+
+			if (!isCanvasBlank()) { // this is because of stale variables, can use ref forgot
+				setTriggerSave(true);
+			}
 		}, false);
 
 		canvas.addEventListener("mouseout", function (e) {
@@ -219,6 +230,7 @@ const CanvasDrawingModule = (props) => {
 					setMenuOpen={setMenuOpen}
 					activeDrawing={activeDrawing}
 					setActiveDrawing={setActiveDrawing}
+					savingState={savingState}
 					setSavingState={setSavingState}
 					erase={erase}
 					triggerSave={triggerSave}

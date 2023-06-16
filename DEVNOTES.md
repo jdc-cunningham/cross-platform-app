@@ -5,6 +5,34 @@ Desires
     - it'll be interesting figuring out how to save data
     - possible to save to image, looking into keeping drawing
 
+06/16/2023
+
+12:00 AM
+
+I wonder if it's a data origin thing
+
+The db is not empty, but not sure if the data is just white or has stroke path
+
+The canvas is not empty when I save, saving process is not failing...
+
+as soon as I type it immediately saves, as I type the name, it has saved 5 times eg. t, t, te, tes, tes
+
+I put a debouncer in...
+
+12:05 AM
+
+oh wait maybe I need to wait for an active drawing before having auto save work
+
+12:23 AM
+
+the saving stops working once the file gets big enough which is odd since it is not that big, it's under 100kb
+
+12:27 AM
+
+ohh... max URI length is 32KB
+
+hmm I think I have to turn it into a picture, API takes the picture and turns it into a blob... and vice versa
+
 06/15/2023
 
 Desires lol
@@ -82,3 +110,7 @@ it overflows not sure why
 9:12 PM
 
 it's the wrapper selector
+
+11:54 PM
+
+the saving is not working and it saves too early while you're typing the name

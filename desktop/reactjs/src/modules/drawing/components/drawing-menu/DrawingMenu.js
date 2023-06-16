@@ -67,7 +67,7 @@ const loadDrawing = (apiGetDrawingPath, drawing, canvas, setMenuOpen, setSearchT
         };
 
         image.src = res.data[0].drawing;
-        setActiveDrawing(drawing)
+        setActiveDrawing(drawing);
         closeMenu(setMenuOpen, setSearchTerm, setTags);
       }
     } else {
@@ -77,7 +77,7 @@ const loadDrawing = (apiGetDrawingPath, drawing, canvas, setMenuOpen, setSearchT
 }
 
 const DrawingMenu = (props) => {
-  const { menuOpen, setMenuOpen, setActiveDrawing, canvas, setSavingState, erase, triggerSave, setTriggerSave } = props;
+  const { menuOpen, setMenuOpen, setActiveDrawing, canvas, savingState, setSavingState, erase, triggerSave, setTriggerSave } = props;
 
   const baseApi = 'http://192.168.1.144:5003';
   const apiSavePath = `${baseApi}/save-drawing`;
@@ -103,7 +103,7 @@ const DrawingMenu = (props) => {
   }, [searchTerm, tags]);
 
   useEffect(() => {
-    if (triggerSave && searchTerm.length) {
+    if (triggerSave && searchTerm.length && savingState !== 'saving') {
       save(searchTerm, apiSavePath, setSavingState, setMenuOpen, setSearchTerm, tags, setTags, canvas, setTriggerSave);
     }
   });
