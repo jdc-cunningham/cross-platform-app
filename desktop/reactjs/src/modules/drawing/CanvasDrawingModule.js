@@ -2,7 +2,7 @@ import React from 'react';
 import { useState, useEffect } from 'react';
 import './CanvasDrawingModule.scss';
 import Pressure from 'pressure';
-import RedX from './assets/icons/uxwing_close-icon.svg';
+import RedX from '../../assets/icons/uxwing_close-icon.svg';
 import DrawingMenu from './components/drawing-menu/DrawingMenu';
 
 const CanvasDrawingModule = (props) => {
@@ -12,10 +12,11 @@ const CanvasDrawingModule = (props) => {
 		id: 0,
 		topics: '',
 	});
-	const [color, setColor] = useState('black');
+	const [color, setColor] = useState('');
 	const [colorsVisible, setColorsVisible] = useState(false);
 	const [drawStarted, setDrawStarted] = useState(false); // specifically for colors
-	const [savingState, setSavingState] = useState(''); // saving, saved
+	const [savingState, setSavingState] = useState('not saved'); // saving, saved
+	const [triggerSave, setTriggerSave] = useState(false);
 
 	// variant from basic demo here:
 	// https://stackoverflow.com/questions/2368784/draw-on-html5-canvas-using-a-mouse
@@ -89,7 +90,7 @@ const CanvasDrawingModule = (props) => {
 	}
 
 	const setCanvasSize = () => {
-		const container = document.querySelector('.canvas-drawing-module');
+		const container = document.querySelector('.App');
 		const header = document.querySelector('.canvas-drawing-module__header');
 
 		canvas = document.getElementById('canvas');
@@ -98,7 +99,7 @@ const CanvasDrawingModule = (props) => {
 	}
 
 	const init = () => {
-		const container = document.querySelector('.canvas-drawing-module');
+		const container = document.querySelector('.App');
 		const header = document.querySelector('.canvas-drawing-module__header');
 
 		canvas = document.getElementById('canvas');
@@ -116,6 +117,7 @@ const CanvasDrawingModule = (props) => {
 
 		canvas.addEventListener("mouseup", function (e) {
 			findxy('up', e)
+			setTriggerSave(true);
 		}, false);
 
 		canvas.addEventListener("mouseout", function (e) {
@@ -147,8 +149,8 @@ const CanvasDrawingModule = (props) => {
 		if (res === 'down') {
 			prevX = currX;
 			prevY = currY;
-			currX = e.clientX - canvas.offsetLeft - 90;
-			currY = e.clientY - canvas.offsetTop - 10;
+			currX = e.clientX - canvas.offsetLeft;
+			currY = e.clientY - canvas.offsetTop;
 
 			flag = true;
 			dot_flag = true;
@@ -169,8 +171,8 @@ const CanvasDrawingModule = (props) => {
 			if (flag) {
 				prevX = currX;
 				prevY = currY;
-				currX = e.clientX - canvas.offsetLeft - 90;
-				currY = e.clientY - canvas.offsetTop - 10;
+				currX = e.clientX - canvas.offsetLeft;
+				currY = e.clientY - canvas.offsetTop;
 				draw();
 			}
 		}
@@ -183,7 +185,7 @@ const CanvasDrawingModule = (props) => {
 	const getCanvas = () => document.getElementById('canvas');
 
 	useEffect(() => {
-		if (drawStarted) {
+		if (color) {
 			getCtx().strokeStyle = color;
 			toggleColors();
 		}
@@ -210,6 +212,8 @@ const CanvasDrawingModule = (props) => {
 					setActiveDrawing={setActiveDrawing}
 					setSavingState={setSavingState}
 					erase={erase}
+					triggerSave={triggerSave}
+					setTriggerSave={setTriggerSave}
 				/>
 			</div>
 			<canvas id="canvas"/>
@@ -222,6 +226,7 @@ const CanvasDrawingModule = (props) => {
 					{colors.map((color, index) => <div key={index} className={`canvas-drawing-module__color ${color}`} onClick={() => setColor(color)} alt={`${color}`} title={`use ${color}`}></div>)}
 				</div>
 			</div>
+      <div className="DrawingMenu__saving-state">{savingState}</div>
 		</div>
 	)
 }
