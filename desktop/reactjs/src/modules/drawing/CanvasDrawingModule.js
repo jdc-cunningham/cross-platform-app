@@ -5,6 +5,9 @@ import Pressure from 'pressure';
 import RedX from './assets/icons/uxwing_close-icon.svg';
 import DrawingMenu from './components/drawing-menu/DrawingMenu';
 
+// github.com/electron/electorn/issues/2288
+const inElectron = navigator.userAgent.toLowerCase().indexOf(' electron/') > -1;
+
 const CanvasDrawingModule = (props) => {
 	const [menuOpen, setMenuOpen] = useState(false);
 	const [activeDrawing, setActiveDrawing] = useState({
@@ -69,7 +72,6 @@ const CanvasDrawingModule = (props) => {
 			change: function(force, event){
 				// this is called every time there is a change in pressure
 				// force will always be a value from 0 to 1 on mobile and desktop
-
 				if (pressures.length === 5) {
 					pressures.shift();
 				}

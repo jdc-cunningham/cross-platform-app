@@ -53,6 +53,14 @@ it might be ElectronJS that's causing the problem... in browser only it's fine..
 
 once I have the browser keyboard working I could use a browser tab
 
+2:30 AM
+
+trying new version of electronjs/packager
+
+otherwise will settle for fixed stroke size
+
+oh man that fixed it... who knew going from v8 to v25 would add new things lol
+
 ---
 
 06/15/2023
