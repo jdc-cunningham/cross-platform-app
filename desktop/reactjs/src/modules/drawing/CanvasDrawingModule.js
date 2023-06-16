@@ -70,7 +70,7 @@ const CanvasDrawingModule = (props) => {
 				// this is called every time there is a change in pressure
 				// force will always be a value from 0 to 1 on mobile and desktop
 
-				if (pressures.length === 3) {
+				if (pressures.length === 10) {
 					pressures.shift();
 				}
 
