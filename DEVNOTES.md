@@ -41,6 +41,12 @@ no I'm a dumbass TEXT max size is 64kb so it's cutoff, I need LONGTEXT
 
 alright... it's all good in the neighborhood, ooh control J is terminal
 
+1:44 AM
+
+ugh... the pressure is bad... keeps going to high pressure (thicker lines)
+
+<img src="./drawing.JPG"/>
+
 ---
 
 06/15/2023
