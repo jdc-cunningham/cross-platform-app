@@ -133,8 +133,6 @@ const CanvasDrawingModule = (props) => {
 		canvas.addEventListener("mouseup", function (e) {
 			findxy('up', e)
 
-			console.log('up', savingState, activeDrawing.id);
-
 			if (!isCanvasBlank()) { // this is because of stale variables, can use ref forgot
 				setTriggerSave(true);
 			}
