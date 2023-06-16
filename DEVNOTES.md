@@ -72,3 +72,13 @@ oh dang the save API does not overwrite existing data, just appends oops
 need to fix the API real quick and then pull in these changes...
 
 I really should make this an npm package or something vs. making changes in two places... or a git submodule maybe
+
+9:00 PM
+
+I gotta eat... but the max-width is off in electron
+
+it overflows not sure why
+
+9:12 PM
+
+it's the wrapper selector
