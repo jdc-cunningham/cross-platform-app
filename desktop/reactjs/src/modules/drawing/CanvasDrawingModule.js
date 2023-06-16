@@ -70,11 +70,11 @@ const CanvasDrawingModule = (props) => {
 				// this is called every time there is a change in pressure
 				// force will always be a value from 0 to 1 on mobile and desktop
 
-				if (pressures.length === 10) {
+				if (pressures.length === 5) {
 					pressures.shift();
 				}
 
-				pressures.push(Math.floor(force * 5));
+				pressures.push(Math.floor(force * 3));
 
 				y = average(pressures);
 			},
