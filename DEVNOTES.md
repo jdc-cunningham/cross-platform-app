@@ -47,6 +47,12 @@ ugh... the pressure is bad... keeps going to high pressure (thicker lines)
 
 <img src="./drawing.JPG"/>
 
+2:04 AM
+
+it might be ElectronJS that's causing the problem... in browser only it's fine... idk
+
+once I have the browser keyboard working I could use a browser tab
+
 ---
 
 06/15/2023

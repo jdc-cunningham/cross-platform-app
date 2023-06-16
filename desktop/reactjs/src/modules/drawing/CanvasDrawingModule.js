@@ -74,7 +74,7 @@ const CanvasDrawingModule = (props) => {
 					pressures.shift();
 				}
 
-				pressures.push(Math.floor(force * 3));
+				pressures.push(Math.floor(force * 5));
 
 				y = average(pressures);
 			},
