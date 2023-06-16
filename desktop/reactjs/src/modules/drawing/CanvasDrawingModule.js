@@ -90,7 +90,7 @@ const CanvasDrawingModule = (props) => {
 	}
 
 	const setCanvasSize = () => {
-		const container = document.querySelector('.App');
+		const container = document.querySelector('.cpa__app-window');
 		const header = document.querySelector('.canvas-drawing-module__header');
 
 		canvas = document.getElementById('canvas');
@@ -99,7 +99,7 @@ const CanvasDrawingModule = (props) => {
 	}
 
 	const init = () => {
-		const container = document.querySelector('.App');
+		const container = document.querySelector('.cpa__app-window');
 		const header = document.querySelector('.canvas-drawing-module__header');
 
 		canvas = document.getElementById('canvas');
