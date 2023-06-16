@@ -65,6 +65,10 @@ oh man that fixed it... who knew going from v8 to v25 would add new things lol
 
 ahh... I gotta get rid of those first contact dots...
 
+<img src="./draw.JPG"/>
+
+It looks better though with the pen pressure working right
+
 ---
 
 06/15/2023
