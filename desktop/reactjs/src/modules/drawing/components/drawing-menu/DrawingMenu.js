@@ -6,7 +6,7 @@ import axios from 'axios';
 var searchTimeout = null;
 
 // yuck, but menu below rerenders a lot
-const save = (searchTerm, apiSavePath, setSavingState, setMenuOpen, setSearchTerm, tags, setTags, canvas, setTriggerSave) => {
+const save = (searchTerm, apiSavePath, setSavingState, setMenuOpen, setSearchTerm, tags, setTags, canvas, setTriggerSave, setRunSave) => {
   if (!searchTerm.length) {
     alert('Need a name');
     return;
@@ -22,6 +22,7 @@ const save = (searchTerm, apiSavePath, setSavingState, setMenuOpen, setSearchTer
     if (res.status === 200) {
       setSavingState('saved');
       setMenuOpen(false);
+      setRunSave(false);
       setTriggerSave(false);
     } else {
       alert('Failed to save');
@@ -87,6 +88,7 @@ const DrawingMenu = (props) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [tags, setTags] = useState('');
   const [searchResults, setSearchResults] = useState([]);
+  const [runSave, setRunSave] = useState(false);
 
   useEffect(() => {
     clearTimeout(searchTimeout);
@@ -102,9 +104,16 @@ const DrawingMenu = (props) => {
     }
   }, [searchTerm, tags]);
 
+  // this is dumb
+  useEffect(() => {
+    if (runSave) {
+      save(searchTerm, apiSavePath, setSavingState, setMenuOpen, setSearchTerm, tags, setTags, canvas, setTriggerSave, setRunSave);
+    }
+  }, [runSave])
+
   useEffect(() => {
     if (triggerSave && searchTerm.length && savingState !== 'saving') {
-      save(searchTerm, apiSavePath, setSavingState, setMenuOpen, setSearchTerm, tags, setTags, canvas, setTriggerSave);
+      setRunSave(true);
     }
   });
 
@@ -117,7 +126,7 @@ const DrawingMenu = (props) => {
         <button type="button" onClick={() => closeMenu(setMenuOpen, setSearchTerm, setTags)}>Cancel</button>
         <button
           type="button"
-          onClick={() => save(searchTerm, apiSavePath, setSavingState, setMenuOpen, setSearchTerm, tags, setTags, canvas, setTriggerSave)}
+          onClick={() => save(searchTerm, apiSavePath, setSavingState, setMenuOpen, setSearchTerm, tags, setTags, canvas, setTriggerSave, setRunSave)}
         >Save</button>
       </div>
       <div className={`DrawingMenu__search-results ${searchResults.length ? 'open' : ''}`}>

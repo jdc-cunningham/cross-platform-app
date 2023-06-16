@@ -228,7 +228,6 @@ const CanvasDrawingModule = (props) => {
 					canvas={getCanvas()}
 					menuOpen={menuOpen}
 					setMenuOpen={setMenuOpen}
-					activeDrawing={activeDrawing}
 					setActiveDrawing={setActiveDrawing}
 					savingState={savingState}
 					setSavingState={setSavingState}

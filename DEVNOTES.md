@@ -33,6 +33,16 @@ ohh... max URI length is 32KB
 
 hmm I think I have to turn it into a picture, API takes the picture and turns it into a blob... and vice versa
 
+1:25 AM
+
+no I'm a dumbass TEXT max size is 64kb so it's cutoff, I need LONGTEXT
+
+1:28 AM
+
+alright... it's all good in the neighborhood, ooh control J is terminal
+
+---
+
 06/15/2023
 
 Desires lol
