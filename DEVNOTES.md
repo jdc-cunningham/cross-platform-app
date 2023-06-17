@@ -31,12 +31,55 @@ The weight control is working for the most part or as far as I can tell
 
 oh yeah the main annoyance right now is the top of the electron window is draggable since it's a touchscreen and I sometimes hit that and minimize/hide/move the drawing app entirely
 
+1:17 PM
+
+alright back on
+
+will rework the menu so it's not so jank
+
+current problems
+
+- if existing content, saves automatically or incorrectly
+
+existing content as in the search term/tags are filled in
+
+1:42 PM
+
+I'm a little distracted, watching some YouTube, repositioned my plant cam
+
+Looks like the mushroom that was growing in the plant died dang... it's a garden plot mushroom just random think it was in the dirt or maybe from the air? idk
+
+1:47 PM
+
+If I have a drawing down and I set a name it automatically saves... hmm, before I finish typing too so I get multiple entries with partial names
+
+1:49 PM
+
+when you load it doesn't auto save
+
+1:52 PM
+
+the other issue is too rapid of a save, multiple fire off at least two in a row
+
+2:13 PM
+
+ugh... this code is a cluster f already I mixed purposes, reworking it
+
+2:50 PM
+
+making some progress still a POS
+
+topics search doesn't work
+
+
+
+---
+
 06/16/2023
 
 11:45 PM
 
 lol yeah that looks correct
-
 <img src="./correct.png"/>
 
 11:59 PM

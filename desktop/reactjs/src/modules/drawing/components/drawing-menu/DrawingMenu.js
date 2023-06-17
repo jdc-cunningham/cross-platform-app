@@ -1,94 +1,24 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 import './DrawingMenu.scss';
-import axios from 'axios';
 
 var searchTimeout = null;
 
-// yuck, but menu below rerenders a lot
-const save = (searchTerm, apiSavePath, setSavingState, setMenuOpen, setSearchTerm, tags, setTags, canvas, setTriggerSave, setRunSave) => {
-  if (!searchTerm.length) {
-    alert('Need a name');
-    return;
-  }
-
-  setSavingState('saving');
-
-  axios.post(apiSavePath, {
-    name: searchTerm,
-    topics: tags,
-    drawing: canvas.toDataURL()
-  }).then((res) => {
-    if (res.status === 200) {
-      setSavingState('saved');
-      setMenuOpen(false);
-      setRunSave(false);
-      setTriggerSave(false);
-    } else {
-      alert('Failed to save');
-    }
-  });
-}
-
-const search = (apiSearchPath, searchTerm, tags, setSearchResults) => {
-  setSearchResults([]);
-
-  axios.post(apiSearchPath, {
-    name: searchTerm,
-    topics: tags
-  }).then((res) => {
-    if (res.status === 200) {
-      if (res.data.drawings.length) {
-        setSearchResults(res.data.drawings);
-      }
-    } else {
-      alert('Failed to search');
-    }
-  });
-}
-
-// this UI state is used for background saving, bad for clearing/blank state
-const closeMenu = (setMenuOpen, setSearchTerm, setTags) => {
-  setMenuOpen(false);
-}
-
-const loadDrawing = (apiGetDrawingPath, drawing, canvas, setMenuOpen, setSearchTerm, setTags, erase, setActiveDrawing) => {
-  axios.post(apiGetDrawingPath, {
-    id: drawing.id
-  }).then((res) => {
-    if (res.status === 200) {
-      if (res.data.length) {
-        // https://stackoverflow.com/a/4409745
-        erase();
-
-        let image = new Image();
-    
-        image.onload = function() {
-          canvas.getContext("2d").drawImage(image, 0, 0);
-        };
-
-        image.src = res.data[0].drawing;
-        setActiveDrawing(drawing);
-        closeMenu(setMenuOpen, setSearchTerm, setTags);
-      }
-    } else {
-      alert('Failed to load drawing');
-    }
-  });
-}
-
 const DrawingMenu = (props) => {
-  const { menuOpen, setMenuOpen, setActiveDrawing, canvas, savingState, setSavingState, erase, triggerSave, setTriggerSave } = props;
-
-  const baseApi = 'http://192.168.1.144:5003';
-  const apiSavePath = `${baseApi}/save-drawing`;
-  const apiSearchPath = `${baseApi}/search-drawing`;
-  const apiGetDrawingPath = `${baseApi}/get-drawing`;
+  const {
+    menuOpen, setMenuOpen, activeDrawing, setActiveDrawing, canvas, setSavingState, erase, triggerSave, setTriggerSave,
+    savingRef, save, search, loadDrawing
+  } = props;
 
   const [searchTerm, setSearchTerm] = useState('');
   const [tags, setTags] = useState('');
   const [searchResults, setSearchResults] = useState([]);
-  const [runSave, setRunSave] = useState(false);
+
+  const closeMenu = () => {
+    setMenuOpen(false);
+    setSearchTerm('');
+    setTags('');
+  };
 
   useEffect(() => {
     clearTimeout(searchTimeout);
@@ -98,25 +28,12 @@ const DrawingMenu = (props) => {
     } else {
       if (searchTerm.length || tags.length) {
         searchTimeout = setTimeout(() => {
-          search(apiSearchPath, searchTerm, tags, setSearchResults);
+          search(searchTerm, tags, setSearchResults);
         }, 500);
       }
     }
   }, [searchTerm, tags]);
-
-  // this is dumb
-  useEffect(() => {
-    if (runSave) {
-      save(searchTerm, apiSavePath, setSavingState, setMenuOpen, setSearchTerm, tags, setTags, canvas, setTriggerSave, setRunSave);
-    }
-  }, [runSave])
-
-  useEffect(() => {
-    if (triggerSave && searchTerm.length && savingState !== 'saving') {
-      setRunSave(true);
-    }
-  });
-
+  
   return (
     <div className={`DrawingMenu ${menuOpen ? 'open' : ''}`}>
       <h2>Save or load drawing</h2>
@@ -126,7 +43,12 @@ const DrawingMenu = (props) => {
         <button type="button" onClick={() => closeMenu(setMenuOpen, setSearchTerm, setTags)}>Cancel</button>
         <button
           type="button"
-          onClick={() => save(searchTerm, apiSavePath, setSavingState, setMenuOpen, setSearchTerm, tags, setTags, canvas, setTriggerSave, setRunSave)}
+          onClick={() => save(
+            {
+              name: searchTerm,
+              tags: tags
+            },
+            setSavingState, setMenuOpen, canvas, setTriggerSave, closeMenu)}
         >Save</button>
       </div>
       <div className={`DrawingMenu__search-results ${searchResults.length ? 'open' : ''}`}>
@@ -134,7 +56,7 @@ const DrawingMenu = (props) => {
           <div
             key={index}
             className="DrawingMenu__search-result"
-            onClick={() => loadDrawing(apiGetDrawingPath, searchResult, canvas, setMenuOpen, setSearchTerm, setTags, erase, setActiveDrawing)}
+            onClick={() => loadDrawing(searchResult, canvas, setMenuOpen, setSearchTerm, setTags, erase, setActiveDrawing, closeMenu)}
           >{searchResult.name}</div>
         )}
       </div>

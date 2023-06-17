@@ -1,25 +1,24 @@
 import React from 'react';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import './CanvasDrawingModule.scss';
 import Pressure from 'pressure';
 import RedX from './assets/icons/uxwing_close-icon.svg';
 import DrawingMenu from './components/drawing-menu/DrawingMenu';
-
-// github.com/electron/electorn/issues/2288
-const inElectron = navigator.userAgent.toLowerCase().indexOf(' electron/') > -1;
+import { save, search, loadDrawing } from './api/api';
 
 const CanvasDrawingModule = (props) => {
 	const [menuOpen, setMenuOpen] = useState(false);
 	const [activeDrawing, setActiveDrawing] = useState({
 		name: 'Drawing title',
 		id: -1,
-		topics: '',
+		tags: '',
 	});
 	const [color, setColor] = useState('');
 	const [colorsVisible, setColorsVisible] = useState(false);
-	const [drawStarted, setDrawStarted] = useState(false); // specifically for colors
 	const [savingState, setSavingState] = useState('not saved'); // saving, saved
 	const [triggerSave, setTriggerSave] = useState(false);
+
+	const savingRef = useRef(false);
 
 	// variant from basic demo here:
 	// https://stackoverflow.com/questions/2368784/draw-on-html5-canvas-using-a-mouse
@@ -55,9 +54,6 @@ const CanvasDrawingModule = (props) => {
 		Pressure.set('#canvas', {
 			start: function(event){
 				// this is called on force start
-				if (!drawStarted) {
-					setDrawStarted(true);
-				}
 			},
 			end: function(){
 				// this is called on force end
@@ -134,7 +130,8 @@ const CanvasDrawingModule = (props) => {
 		canvas.addEventListener("mouseup", function (e) {
 			findxy('up', e)
 
-			if (!isCanvasBlank()) { // this is because of stale variables, can use ref forgot
+			if (!isCanvasBlank() && !savingRef.current) { // this is because of stale variables, can use ref forgot
+				console.log('trigger save');
 				setTriggerSave(true);
 			}
 		}, false);
@@ -204,6 +201,16 @@ const CanvasDrawingModule = (props) => {
 	const getCanvas = () => document.getElementById('canvas');
 
 	useEffect(() => {
+		if (triggerSave) {
+			console.log(activeDrawing);
+		}
+		if (triggerSave && !savingRef.current && activeDrawing.name && activeDrawing.name !== 'Drawing title') {
+			savingRef.current = true;
+			save(activeDrawing, setSavingState, undefined, getCanvas(), setTriggerSave, undefined, savingRef);
+		}
+	}, [triggerSave]);
+
+	useEffect(() => {
 		if (color) {
 			getCtx().strokeStyle = color;
 			toggleColors();
@@ -230,10 +237,13 @@ const CanvasDrawingModule = (props) => {
 					canvas={getCanvas()}
 					menuOpen={menuOpen}
 					setMenuOpen={setMenuOpen}
+					activeDrawing={activeDrawing}
 					setActiveDrawing={setActiveDrawing}
-					savingState={savingState}
 					setSavingState={setSavingState}
 					erase={erase}
+					save={save}
+					search={search}
+					loadDrawing={loadDrawing}
 					triggerSave={triggerSave}
 					setTriggerSave={setTriggerSave}
 				/>
