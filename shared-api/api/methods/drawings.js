@@ -73,18 +73,47 @@ const searchDrawing = (req, res) => {
     res.status(400).send('please make sure all fields are filled in');
   }
 
-  pool.query(
-    `SELECT id, name FROM canvas_drawings WHERE name LIKE ? AND topics LIKE ?`, // not correct way to search against comma list
-    ['%' + name + '%', '%' + topic + '%'],
-    (err, qres) => {
-      if (err) {
-        console.log('failed to search drawing', err);
-        res.status(400).send('failed to search drawing');
-      } else {
-        res.status(200).send({drawings: qres}); // don't check if it was actually made
+  // dumb
+  if (name && !topic) {
+    pool.query(
+      `SELECT id, name FROM canvas_drawings WHERE name LIKE ?`, // not correct way to search against comma list
+      ['%' + name + '%'],
+      (err, qres) => {
+        if (err) {
+          console.log('failed to search drawing', err);
+          res.status(400).send('failed to search drawing');
+        } else {
+          res.status(200).send({drawings: qres}); // don't check if it was actually made
+        }
       }
-    }
-  );
+    );
+  } else if (!name && topic) {
+    pool.query(
+      `SELECT id, name FROM canvas_drawings WHERE topics LIKE ?`, // not correct way to search against comma list
+      ['%' + topic + '%'],
+      (err, qres) => {
+        if (err) {
+          console.log('failed to search drawing', err);
+          res.status(400).send('failed to search drawing');
+        } else {
+          res.status(200).send({drawings: qres}); // don't check if it was actually made
+        }
+      }
+    );
+  } else {
+    pool.query(
+      `SELECT id, name FROM canvas_drawings WHERE name LIKE ? AND topics LIKE ?`, // not correct way to search against comma list
+      ['%' + name + '%', '%' + topic + '%'],
+      (err, qres) => {
+        if (err) {
+          console.log('failed to search drawing', err);
+          res.status(400).send('failed to search drawing');
+        } else {
+          res.status(200).send({drawings: qres}); // don't check if it was actually made
+        }
+      }
+    );
+  }
 }
 
 const getDrawing = (req, res) => {
