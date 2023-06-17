@@ -63,7 +63,7 @@ const saveDrawing = async (req, res) => {
 }
 
 const searchDrawing = (req, res) => {
-  const { name, topic } = req.body;
+  const { name, topics } = req.body;
 
   // sending an empty payload returns all
 
@@ -74,9 +74,9 @@ const searchDrawing = (req, res) => {
   }
 
   // dumb
-  if (name && !topic) {
+  if (name && !topics) {
     pool.query(
-      `SELECT id, name FROM canvas_drawings WHERE name LIKE ?`, // not correct way to search against comma list
+      `SELECT id, name, topics FROM canvas_drawings WHERE name LIKE ?`, // not correct way to search against comma list
       ['%' + name + '%'],
       (err, qres) => {
         if (err) {
@@ -87,10 +87,10 @@ const searchDrawing = (req, res) => {
         }
       }
     );
-  } else if (!name && topic) {
+  } else if (!name && topics) {
     pool.query(
-      `SELECT id, name FROM canvas_drawings WHERE topics LIKE ?`, // not correct way to search against comma list
-      ['%' + topic + '%'],
+      `SELECT id, name, topics FROM canvas_drawings WHERE topics LIKE ?`, // not correct way to search against comma list
+      ['%' + topics + '%'],
       (err, qres) => {
         if (err) {
           console.log('failed to search drawing', err);
@@ -102,8 +102,8 @@ const searchDrawing = (req, res) => {
     );
   } else {
     pool.query(
-      `SELECT id, name FROM canvas_drawings WHERE name LIKE ? AND topics LIKE ?`, // not correct way to search against comma list
-      ['%' + name + '%', '%' + topic + '%'],
+      `SELECT id, name, topics FROM canvas_drawings WHERE name LIKE ? AND topics LIKE ?`, // not correct way to search against comma list
+      ['%' + name + '%', '%' + topics + '%'],
       (err, qres) => {
         if (err) {
           console.log('failed to search drawing', err);
