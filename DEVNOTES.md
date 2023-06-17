@@ -15,6 +15,22 @@ previous search results still up, need the active drawing to determine what to s
 
 I'll probably fix that tomorrow first thing since it's a little harder than visually aligning keys on a keyboard
 
+1:16 AM
+
+holy crap the laptop runs hot while drawing lol, probably bad code
+
+also this laptop is charging/fanless but yeah
+
+<img src="./artiste.png"/>
+
+It's that thing where an amateur drawer takes more strokes
+
+The weight control is working for the most part or as far as I can tell
+
+1:18 AM
+
+oh yeah the main annoyance right now is the top of the electron window is draggable since it's a touchscreen and I sometimes hit that and minimize/hide/move the drawing app entirely
+
 06/16/2023
 
 11:45 PM
