@@ -5,7 +5,23 @@ Desires
     - it'll be interesting figuring out how to save data
     - possible to save to image, looking into keeping drawing
 
+06/17/2023
+
+
+
 06/16/2023
+
+11:45 PM
+
+lol yeah that looks correct
+
+<img src="./correct.png"/>
+
+11:59 PM
+
+I'm obsessing over palm detection reeeeeeeeeeeeeeeee
+
+<img src="./palm-detected.png"/>
 
 12:00 AM
 

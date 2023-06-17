@@ -164,7 +164,7 @@ const CanvasDrawingModule = (props) => {
 		}
 	}
 
-	const findxy = (res, e) => {
+	const findxy = (res, e) => {		
 		if (res === 'down') {
 			prevX = currX;
 			prevY = currY;
@@ -184,6 +184,14 @@ const CanvasDrawingModule = (props) => {
 				prevY = currY;
 				currX = e.clientX - canvas.offsetLeft - 90;
 				currY = e.clientY - canvas.offsetTop - 10;
+
+				// avoid palm jumping (draws giant diagonal line from palm to pen tip)
+				// this stops drawing, need to lift up pen/touch down again to continue
+				if (currX > 0 && (currX > prevX + 90 || currX < prevX - 90)) {
+					currX = prevX;		
+					currY = prevY;
+				}
+
 				draw();
 			}
 		}
@@ -208,6 +216,9 @@ const CanvasDrawingModule = (props) => {
 		window.addEventListener('resize', function(event) {
 			setCanvasSize();
 		}, true);
+
+		// disable right click sometimes triggered by palm
+		document.getElementById('canvas').addEventListener('contextmenu', event => event.preventDefault());
 	}, [])
 
 	return (
