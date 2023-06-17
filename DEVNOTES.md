@@ -75,6 +75,9 @@ topics search doesn't work
 
 oof... nasty alright, that's good for now, need to go back to keyboard then integrate it into this drawing app
 
+3:04 PM
+
+I'm going to switch to my desktop to develop the keyboard faster since it has a bigger screen TRAITOR!!!
 
 ---
 
