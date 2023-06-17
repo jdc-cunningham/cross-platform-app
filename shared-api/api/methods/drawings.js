@@ -74,7 +74,7 @@ const searchDrawing = (req, res) => {
   }
 
   pool.query(
-    `SELECT id, name FROM canvas_drawings WHERE name LIKE ? OR topics LIKE ?`, // not correct way to search against comma list
+    `SELECT id, name FROM canvas_drawings WHERE name LIKE ? AND topics LIKE ?`, // not correct way to search against comma list
     ['%' + name + '%', '%' + topic + '%'],
     (err, qres) => {
       if (err) {
