@@ -131,7 +131,6 @@ const CanvasDrawingModule = (props) => {
 			findxy('up', e)
 
 			if (!isCanvasBlank() && !savingRef.current) { // this is because of stale variables, can use ref forgot
-				console.log('trigger save');
 				setTriggerSave(true);
 			}
 		}, false);
@@ -201,9 +200,6 @@ const CanvasDrawingModule = (props) => {
 	const getCanvas = () => document.getElementById('canvas');
 
 	useEffect(() => {
-		if (triggerSave) {
-			console.log(activeDrawing);
-		}
 		if (triggerSave && !savingRef.current && activeDrawing.name && activeDrawing.name !== 'Drawing title') {
 			savingRef.current = true;
 			save(activeDrawing, setSavingState, undefined, getCanvas(), setTriggerSave, undefined, savingRef);

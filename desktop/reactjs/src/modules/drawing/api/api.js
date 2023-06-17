@@ -5,7 +5,7 @@ const baseApi = 'http://192.168.1.144:5003';
 export const save =
   (
     activeDrawing, setSavingState, setMenuOpen = undefined,
-    canvas, setTriggerSave, closeMenu = undefined, savingRef = undefined
+    canvas, setTriggerSave, closeMenu = undefined, savingRef = undefined, setActiveDrawing = undefined
   ) => {
     const apiSavePath = `${baseApi}/save-drawing`;
 
@@ -27,6 +27,13 @@ export const save =
         if (setMenuOpen) setMenuOpen(false);
         if (closeMenu) closeMenu();
         setTriggerSave(false);
+
+        if (setActiveDrawing) {
+          setActiveDrawing({
+            name: activeDrawing.name,
+            topics: activeDrawing.tags
+          });
+        }
       } else {
         alert('Failed to save');
       }
@@ -54,8 +61,6 @@ export const search = (searchTerm, tags, setSearchResults) => {
 
 export const loadDrawing = (drawing, canvas, setMenuOpen, setSearchTerm, setTags, erase, setActiveDrawing, closeMenu) => {
   const apiGetDrawingPath = `${baseApi}/get-drawing`;
-
-  console.log('load', drawing);
 
   axios.post(apiGetDrawingPath, {
     id: drawing.id

@@ -48,7 +48,7 @@ const DrawingMenu = (props) => {
               name: searchTerm,
               tags: tags
             },
-            setSavingState, setMenuOpen, canvas, setTriggerSave, closeMenu)}
+            setSavingState, setMenuOpen, canvas, setTriggerSave, closeMenu, undefined, setActiveDrawing)}
         >Save</button>
       </div>
       <div className={`DrawingMenu__search-results ${searchResults.length ? 'open' : ''}`}>

@@ -71,6 +71,9 @@ making some progress still a POS
 
 topics search doesn't work
 
+3:02 PM
+
+oof... nasty alright, that's good for now, need to go back to keyboard then integrate it into this drawing app
 
 
 ---
