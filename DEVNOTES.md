@@ -7,7 +7,13 @@ Desires
 
 06/17/2023
 
+12:32 AM
 
+I have to put time into the menu because it sucks...
+
+previous search results still up, need the active drawing to determine what to save against vs. menu state
+
+I'll probably fix that tomorrow first thing since it's a little harder than visually aligning keys on a keyboard
 
 06/16/2023
 
