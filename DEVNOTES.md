@@ -79,6 +79,16 @@ oof... nasty alright, that's good for now, need to go back to keyboard then inte
 
 I'm going to switch to my desktop to develop the keyboard faster since it has a bigger screen TRAITOR!!!
 
+4:45 PM
+
+ehh... feeling bored, lazy
+
+I got the keyboard done though so it can be pulled in/fire off the keys
+
+I might have to actually map it to keyboard events
+
+
+
 ---
 
 06/16/2023
