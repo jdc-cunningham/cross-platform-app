@@ -33,6 +33,19 @@ const DrawingMenu = (props) => {
         }, 500);
       }
     }
+
+    // clear menu after loading
+    if (!searchTerm.length && !tags.length) {
+      setKeyboardText(prevState => ({
+        ...prevState,
+        fields: {
+          ...prevState.fields,
+          searchTerm: '',
+          tags: ''
+        },
+        lastActiveField: ''
+      }));
+    }
   }, [searchTerm, tags]);
 
   useEffect(() => {
