@@ -117,7 +117,19 @@ had to update some stuff since code wouldn't parse right
 
 this is rough, I have to snake the state through so many places
 
+9:23 PM
 
+I'm going to try and integrate keyboard into the note pad part of this app
+
+I want to be done with this and focus on doing other stuff... while using these tools
+
+9:27 PM
+
+oof my 3 year old code yuck
+
+9:32 PM
+
+nah I can't do this... I gotta trace the steps/modify stuff and I'm burnt
 
 ---
 

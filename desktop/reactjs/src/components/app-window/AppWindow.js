@@ -11,9 +11,17 @@ const AppWindow = (props) => {
     const renderModule = (activeApp) => {
         switch(activeApp) {
             case "notes":
-                return <NoteTakingModule />;
+                return <NoteTakingModule
+                    setShowKeyboard={setShowKeyboard}
+                    keyboardText={keyboardText}
+                    setKeyboardText={setKeyboardText}
+                />;
             case "drawing":
-                return <CanvasDrawingModule setShowKeyboard={setShowKeyboard} keyboardText={keyboardText} setKeyboardText={setKeyboardText} />;
+                return <CanvasDrawingModule
+                    setShowKeyboard={setShowKeyboard}
+                    keyboardText={keyboardText}
+                    setKeyboardText={setKeyboardText}
+                />;
             default:
                 return <h2>Select an app on the left</h2>
         }
