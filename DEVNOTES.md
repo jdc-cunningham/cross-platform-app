@@ -131,6 +131,10 @@ oof my 3 year old code yuck
 
 nah I can't do this... I gotta trace the steps/modify stuff and I'm burnt
 
+9:40 PM
+
+ugh... the tablet mode changes the dimensions of the screen, will turn overflow off since it affects the Y offset
+
 ---
 
 06/16/2023
