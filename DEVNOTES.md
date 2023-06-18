@@ -5,6 +5,39 @@ Desires
     - it'll be interesting figuring out how to save data
     - possible to save to image, looking into keeping drawing
 
+06/18/2023
+
+3:54 PM
+
+waking up late, had my Sunday "morning" anime good stuff
+
+going to work on this now, integrate the keyboard into the note taking app
+
+in the future I'd like to rework app to fuse the two together so you can have many active content editable notes that also include drawing
+
+3:58 PM
+
+I am looking forward to making progress in life again, been in limbo last few months, job searching, fear and dread
+
+I will commit to starting businesses though vs. doing random projects, need to free myself
+
+I'm not really thinking right now, I'm just copying what I did before to get this keyboard working for note app and then making display split vs. positioned absolutely
+
+4:06 PM
+
+oof this code is sus
+
+4:29 PM
+
+yuck yuck yuck this code is nasty, mixed purposes, lot of state oof
+
+it's not working in harmony with a physical keyboard currently
+
+5:18 PM
+
+man that was rough but got it working
+
+
 06/17/2023
 
 12:32 AM

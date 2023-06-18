@@ -1,9 +1,11 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import './NoteTakingModule.scss';
 import axios from 'axios';
 import redX from './../../assets/icons/svgs/close.svg';
 
 const NoteTakingApp = (props) => {
+    const { setShowKeyboard, keyboardText, setKeyboardText } = props;
+
     const [notesModuleState, setNotesModuleState] = useState({
         searchStr: "",
         searchResults: [],
@@ -16,8 +18,12 @@ const NoteTakingApp = (props) => {
         updateNoteTimeout: null
     });
 
+    const [focusedInput, setFocusedInput] = useState('');
+
     const noteNameInput = useRef(null);
     const noteBodyInput = useRef(null);
+    const searchingRef = useRef(false); // man this is scuff, crap old code
+    const lastSearchedRef = useRef('');
 
     /**
      * Info about this app/workflow
@@ -29,7 +35,8 @@ const NoteTakingApp = (props) => {
      */
 
     const notesApiBasePath = window.location.href.indexOf('localhost') !== -1 // this should use production flag
-        ? process.env.REACT_APP_SEARCH_API_BASE_PATH_DEV
+        // ? process.env.REACT_APP_SEARCH_API_BASE_PATH_DEV
+        ? process.env.REACT_APP_SEARCH_API_BASE_PATH // don't matter local API exposed elsewhere
         : process.env.REACT_APP_SEARCH_API_BASE_PATH;
     const searchNotesApiPath = notesApiBasePath + '/search-notes';
     const createNoteApiPath = notesApiBasePath + '/save-note';
@@ -84,6 +91,9 @@ const NoteTakingApp = (props) => {
             })
             .catch((err) => {
                 console.log(err, err.response);
+            })
+            .finally(() => {
+                searchingRef.current = false;
             });
         }, 250);
 
@@ -112,6 +122,16 @@ const NoteTakingApp = (props) => {
         })
         .then((res) => { // pointing this out I use both .then and async/await
             if (res.status === 200) {
+                searchingRef.current = false;
+                setKeyboardText(prevState => ({
+                    ...prevState,
+                    fields: {
+                        ...prevState.fields,
+                        noteAppSearch: '',
+                        noteAppBody: ''
+                    }
+                }));
+                setShowKeyboard(false);
                 setNotesModuleState(prev => ({
                     ...prev,
                     searchStr: "",
@@ -162,6 +182,15 @@ const NoteTakingApp = (props) => {
                 body: noteData.body
             }
         }));
+        setKeyboardText(prevState => ({
+            ...prevState,
+            fields: {
+                ...prevState.fields,
+                noteAppSearch: '',
+                noteAppBody: noteData.body
+            }
+        }));
+        setShowKeyboard(false);
     }
 
     const updateNote = () => {
@@ -210,8 +239,8 @@ const NoteTakingApp = (props) => {
     }
 
     const determineNoteBodyText = (() => {
-        if (notesModuleState.activeNote) { 
-            return notesModuleState.activeNote.body;
+        if (notesModuleState.activeNote) {
+            return keyboardText.fields.noteAppBody || notesModuleState.activeNote.body;
         }
 
         if (notesModuleState.createMode) {
@@ -247,17 +276,87 @@ const NoteTakingApp = (props) => {
         });
     }
 
+    const updateKeyboardState = (val, which) => {
+        if (which === 'search') {
+            setKeyboardText(prevState => ({
+                ...prevState,
+                fields: {
+                    ...prevState.fields,
+                    noteAppSearch: val,
+                }
+            }));
+        } else {
+            setKeyboardText(prevState => ({
+                ...prevState,
+                fields: {
+                    ...prevState.fields,
+                    noteAppBody: val,
+                }
+            }));
+            updateNote();
+        }
+    }
+
+    useEffect(() => {
+        if (!notesModuleState.searchStr.length && !notesModuleState.activeNote?.name.length) {
+            setKeyboardText(prevState => ({
+                ...prevState,
+                fields: {
+                    ...prevState.fields,
+                    noteAppSearch: '',
+                    noteAppBody: ''
+                }
+            }));
+        }
+    }, [notesModuleState]);
+
+    useEffect(() => {
+        if (focusedInput) {
+            setKeyboardText(prevState => ({
+                ...prevState,
+                lastActiveField: focusedInput
+            }));
+            setShowKeyboard(true);
+        } else {
+            setShowKeyboard(false);
+        }
+    }, [focusedInput]);
+
+    useEffect(() => {
+        setKeyboardText(prevState => ({
+            ...prevState,
+            fields: {
+                ...prevState.fields,
+                noteAppSearch: '',
+                noteAppBody: ''
+            }
+        }));
+    }, []);
+
+    useEffect(() => {
+        if (keyboardText.fields?.noteAppSearch?.length &&
+            lastSearchedRef.current !== keyboardText.fields.noteAppSearch &&
+            !searchingRef.current
+        ) {
+            searchingRef.current = true;
+            lastSearchedRef.current = keyboardText.fields.noteAppSearch;
+            searchNotes();
+        }
+    });
+
     return (
         <div className="cpa__module" id="module--note-taking-module">
             <div className={ !notesModuleState.createMode ? "module-notes__header" : "module-notes__header create" }>
                 <input
                     ref={ noteNameInput }
-                    onChange={ searchNotes }
+                    onChange={ (e) => updateKeyboardState(e.target.value, 'search') }
                     type="text"
                     placeholder="search note"
                     className="module-notes__search-bar"
-                    value={ notesModuleState.searchStr ? notesModuleState.searchStr : (notesModuleState.activeNote  ? notesModuleState.activeNote.name  : "")} // bad nested ternaries
-                    disabled={ notesModuleState.creatingNote }/>
+                    value={ keyboardText.fields.noteAppSearch ? keyboardText.fields.noteAppSearch : (notesModuleState.activeNote  ? notesModuleState.activeNote.name  : "")} // bad nested ternaries
+                    disabled={ notesModuleState.creatingNote }
+                    onFocus={() => setFocusedInput('noteAppSearch')}
+                />
                 <button
                     type="button"
                     className="module-notes__search-bar-create-btn"
@@ -291,7 +390,8 @@ const NoteTakingApp = (props) => {
                     placeholder="write..."
                     value={ determineNoteBodyText }
                     disabled={ notesModuleState.creatingNote }
-                    onChange={ notesModuleState.createMode ? null : updateNote }></textarea>
+                    onChange={(e) => notesModuleState.createMode ? null : updateKeyboardState(e.target.value, 'note body') }
+                    onFocus={() => setFocusedInput('noteAppBody')}></textarea>
             </div>
         </div>
     )

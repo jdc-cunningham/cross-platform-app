@@ -12,6 +12,12 @@
     * {
         outline: none;
     }
+
+    &.notes-active.keyboard-active {
+        .modules-notes__text-area {
+            height: 32%;
+        }
+    }
 }
 
 /**

@@ -14,7 +14,7 @@ const App = () => {
 	});
 
 	return (
-		<div className="App">
+		<div className={`App ${activeApp === 'notes' ? 'notes-active' : 'drawing-active'} ${showKeyboard ? 'keyboard-active' : ''}`}>
 			<Dock activeApp={activeApp} setActiveApp={setActiveApp} />
 			<AppWindow activeApp={activeApp} setShowKeyboard={setShowKeyboard} keyboardText={keyboardText} setKeyboardText={setKeyboardText} />
 			{showKeyboard && <WebKeyboard keyboardText={keyboardText} setKeyboardText={setKeyboardText} />}

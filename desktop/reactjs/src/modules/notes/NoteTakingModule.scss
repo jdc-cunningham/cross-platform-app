@@ -95,8 +95,8 @@
 
 .module-notes__body {
     display: flex;
-    align-items: center;
-    justify-content: center;
+    align-items: flex-start;
+    justify-content: flex-start;
     flex: 1;
     margin-top: 10px;
 }
