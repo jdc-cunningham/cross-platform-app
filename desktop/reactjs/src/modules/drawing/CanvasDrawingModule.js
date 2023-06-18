@@ -202,6 +202,12 @@ const CanvasDrawingModule = (props) => {
 	const getCanvas = () => document.getElementById('canvas');
 
 	useEffect(() => {
+		if (!menuOpen) {
+			setShowKeyboard(false);
+		}
+	}, [menuOpen]);
+
+	useEffect(() => {
 		if (triggerSave && !savingRef.current && activeDrawing.name && activeDrawing.name !== 'Drawing title') {
 			savingRef.current = true;
 			save(activeDrawing, setSavingState, undefined, getCanvas(), setTriggerSave, undefined, savingRef);
