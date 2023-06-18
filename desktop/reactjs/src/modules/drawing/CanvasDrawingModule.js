@@ -7,6 +7,8 @@ import DrawingMenu from './components/drawing-menu/DrawingMenu';
 import { save, search, loadDrawing } from './api/api';
 
 const CanvasDrawingModule = (props) => {
+	const { setShowKeyboard, keyboardText, setKeyboardText } = props;
+
 	const [menuOpen, setMenuOpen] = useState(false);
 	const [activeDrawing, setActiveDrawing] = useState({
 		name: 'Drawing title',
@@ -242,6 +244,9 @@ const CanvasDrawingModule = (props) => {
 					loadDrawing={loadDrawing}
 					triggerSave={triggerSave}
 					setTriggerSave={setTriggerSave}
+					setShowKeyboard={setShowKeyboard}
+					keyboardText={keyboardText}
+					setKeyboardText={setKeyboardText}
 				/>
 			</div>
 			<canvas id="canvas"/>

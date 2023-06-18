@@ -6,14 +6,14 @@ import NoteTakingModule from './../../modules/notes/NoteTakingModule' ;
 import CanvasDrawingModule from './../../modules/drawing/CanvasDrawingModule';
 
 const AppWindow = (props) => {
-    const activeApp = props.activeApp;
+    const { activeApp, setShowKeyboard, keyboardText, setKeyboardText } = props;
 
     const renderModule = (activeApp) => {
         switch(activeApp) {
             case "notes":
                 return <NoteTakingModule />;
             case "drawing":
-                return <CanvasDrawingModule />;
+                return <CanvasDrawingModule setShowKeyboard={setShowKeyboard} keyboardText={keyboardText} setKeyboardText={setKeyboardText} />;
             default:
                 return <h2>Select an app on the left</h2>
         }

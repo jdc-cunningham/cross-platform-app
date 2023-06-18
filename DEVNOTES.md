@@ -87,6 +87,36 @@ I got the keyboard done though so it can be pulled in/fire off the keys
 
 I might have to actually map it to keyboard events
 
+5:32 PM
+
+poking at it...
+
+5:45 PM
+
+this is actually neat... a keyboard you can dynamically use/set the target against (where it types into)
+
+5:58 PM
+
+distracted
+
+6:01 PM
+
+firing off keyboard events seems problematic so I'll just have a top-most level string thing trickling down into any active text input
+
+6:31 PM
+
+distracted
+
+I think I will use an object that has a key (input) then value, so that'll keep state of various text boxes
+
+6:46 PM
+
+had to update some stuff since code wouldn't parse right
+
+7:09 PM
+
+this is rough, I have to snake the state through so many places
+
 
 
 ---

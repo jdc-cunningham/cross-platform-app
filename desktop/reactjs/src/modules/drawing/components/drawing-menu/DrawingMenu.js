@@ -6,10 +6,11 @@ var searchTimeout = null;
 
 const DrawingMenu = (props) => {
   const {
-    menuOpen, setMenuOpen, activeDrawing, setActiveDrawing, canvas, setSavingState, erase, triggerSave, setTriggerSave,
-    savingRef, save, search, loadDrawing
+    menuOpen, setMenuOpen, setActiveDrawing, canvas, setSavingState, erase, setTriggerSave,
+    save, search, loadDrawing, setShowKeyboard, keyboardText, setKeyboardText
   } = props;
 
+	const [focusedInput, setFocusedInput] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
   const [tags, setTags] = useState('');
   const [searchResults, setSearchResults] = useState([]);
@@ -33,12 +34,57 @@ const DrawingMenu = (props) => {
       }
     }
   }, [searchTerm, tags]);
+
+  useEffect(() => {
+    if (focusedInput) {
+      setKeyboardText(prevState => ({
+        ...prevState,
+        lastActiveField: focusedInput
+      }));
+      setShowKeyboard(true);
+    } else {
+      setShowKeyboard(false);
+    }
+  }, [focusedInput]);
+
+  useState(() => {
+    // set the initial keyboard state for drawing menu fields
+    setKeyboardText(prevState => ({
+      ...prevState,
+      fields: {
+        ...prevState.fields,
+        searchTerm: '',
+        tags: ''
+      }
+    }));
+  }, []);
+
+  useEffect(() => {
+    setSearchTerm(keyboardText.fields.searchTerm);
+    setTags(keyboardText.fields.tags);
+  });
   
   return (
     <div className={`DrawingMenu ${menuOpen ? 'open' : ''}`}>
       <h2>Save or load drawing</h2>
-      <input type="text" className="DrawingMenu__search-input" placeholder="drawing name" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)}/>
-      <input type="text" className="DrawingMenu__tag-input" placeholder="tags" value={tags} onChange={(e) => setTags(e.target.value)}/>
+      <input
+        type="text"
+        className="DrawingMenu__search-input"
+        placeholder="drawing name"
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+        onFocus={() => setFocusedInput('searchTerm')}
+        // onBlur={() => setFocusedInput('')}
+      />
+      <input
+        type="text"
+        className="DrawingMenu__tag-input"
+        placeholder="tags"
+        value={tags}
+        onChange={(e) => setTags(e.target.value)}
+        onFocus={() => setFocusedInput('tags')}
+        // onBlur={() => setFocusedInput('')}
+      />
       <div className="DrawingMenu__btns">
         <button type="button" onClick={() => closeMenu(setMenuOpen, setSearchTerm, setTags)}>Cancel</button>
         <button

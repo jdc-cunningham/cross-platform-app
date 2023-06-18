@@ -1,0 +1,112 @@
+.WebKeyboard {
+  position: absolute;
+  top: 50%;
+  left: 90px;
+  width: calc(100% - 100px);
+  height: auto;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  flex-direction: column;
+  touch-action: none;
+  background-color: #dcdcdc;
+  transform: scale(0.9);
+
+  .hidden {
+    display: none !important;
+  }
+}
+
+.WebKeyboard__row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-direction: row;
+  width: 100%;
+}
+
+.WebKeyboard__row-key {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 4rem;
+  height: 4rem;
+  padding: 4rem;
+  border: 2px solid #282828;
+  border-radius: 6px;
+  margin: 0.25rem;
+  background-color: white;
+
+  @media only screen and (max-width: 1500px) {
+    padding: 2.5rem;
+  }
+
+  &.active {
+    background-color: #505050;
+  }
+
+  &.left {
+    .WebKeyboard__display-key {
+      transform: rotate(-90deg);
+    }
+  }
+
+  &.right {
+    .WebKeyboard__display-key {
+      transform: rotate(90deg);
+    }
+  }
+
+  &.down {
+    .WebKeyboard__display-key {
+      transform: rotate(180deg);
+    }
+  }
+
+  &.space {
+    width: 50%;
+  }
+
+  &.enter {
+    width: 15%;
+  }
+
+  &.up {
+    margin-right: 9rem;
+  }
+
+  &.backspace {
+    width: 18rem;
+  }
+
+  &.l-ctrl, &.l-alt, &.tab {
+    width: 14rem;
+  }
+
+  &.caps {
+    width: 18rem;
+  }
+
+  &.l-shift {
+    width: 20rem;
+  }
+}
+
+.WebKeyboard__display-key {
+  font-size: 2rem;
+
+  @media only screen and (max-width: 1500px) {
+    font-size: 1.75rem;
+  }
+}
+
+.WebKeyboard__display-key-alts {
+  position: absolute;
+  top: 70%;
+  left: 50%;
+  transform: translate(-50%, 0);
+  font-size: 1rem;
+  font-weight: bold;
+  color: #505050;
+}
