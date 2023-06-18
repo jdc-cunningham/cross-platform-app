@@ -32,12 +32,13 @@ function WebKeyboard(props) {
     updateKeyboardState(key, key2);
 
     if (key === 'backspace') {
-      updateKeyboardState(keyboardText.substring(0, keyboardText.length - 1));
+      updateKeyboardState(
+        keyboardText.fields[keyboardText.lastActiveField].substring(
+          0, keyboardText.fields[keyboardText.lastActiveField].length - 1));
     } else {
       updateKeyboardState(shiftOn
         ? (keyboardText.fields[keyboardText.lastActiveField] || '') + key2
-        : (keyboardText.fields[keyboardText.lastActiveField] || '') + key
-      );
+        : (keyboardText.fields[keyboardText.lastActiveField] || '') + key);
     }
   }
 
