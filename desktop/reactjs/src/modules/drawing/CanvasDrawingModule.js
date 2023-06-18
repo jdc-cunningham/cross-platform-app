@@ -225,7 +225,10 @@ const CanvasDrawingModule = (props) => {
 		init();
 
 		window.addEventListener('resize', function(event) {
-			setCanvasSize();
+			// prevent this from throwing an error on resize and drawing app not active
+			if (document.getElementById('canvas')) {
+				setCanvasSize();
+			}
 		}, true);
 
 		// disable right click sometimes triggered by palm
