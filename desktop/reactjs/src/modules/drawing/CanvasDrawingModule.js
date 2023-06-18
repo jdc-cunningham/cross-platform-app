@@ -21,6 +21,7 @@ const CanvasDrawingModule = (props) => {
 	const [triggerSave, setTriggerSave] = useState(false);
 
 	const savingRef = useRef(false);
+	const colorRef = useRef('black');
 
 	// variant from basic demo here:
 	// https://stackoverflow.com/questions/2368784/draw-on-html5-canvas-using-a-mouse
@@ -157,7 +158,7 @@ const CanvasDrawingModule = (props) => {
 		ctx.beginPath();
 		ctx.moveTo(prevX, prevY);
 		ctx.lineTo(currX, currY);
-		ctx.lineWidth = y;
+		ctx.lineWidth = colorRef.current === 'white' ? 15 : y;
 		ctx.stroke();
 		ctx.closePath();
 	}
@@ -226,6 +227,7 @@ const CanvasDrawingModule = (props) => {
 	useEffect(() => {
 		if (color) {
 			getCtx().strokeStyle = color;
+			colorRef.current = color;
 			toggleColors();
 		}
 	}, [color])
