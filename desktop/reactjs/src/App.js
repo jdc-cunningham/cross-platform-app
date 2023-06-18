@@ -7,7 +7,7 @@ import WebKeyboard from './modules/keyboard/WebKeyboard';
 
 const App = () => {
 	const [activeApp, setActiveApp] = useState("");
-	const [showKeyboard, setShowKeyboard] = useState(true);
+	const [showKeyboard, setShowKeyboard] = useState(false);
 	const [keyboardText, setKeyboardText] = useState({
 		fields: {},
 		lastActiveField: null
