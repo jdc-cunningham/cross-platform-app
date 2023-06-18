@@ -89,21 +89,30 @@ const CanvasDrawingModule = (props) => {
 	}
 
 	const setCanvasSize = () => {
+		canvas = getCanvas();
+
 		const container = document.querySelector('.cpa__app-window');
 		const header = document.querySelector('.canvas-drawing-module__header');
 
-		canvas = document.getElementById('canvas');
-		const oldData = canvas.toDataUrl();
-		canvas.width = container.clientWidth - 10; // scrollbar
-		canvas.height = container.clientHeight - header.offsetHeight - 10;
+		let oldData;
 
-		let image = new Image();
-    
-		image.onload = function() {
-			canvas.getContext("2d").drawImage(image, 0, 0);
-		};
+		try {
+			oldData = canvas.toDataUrl(); // this keeps throwing an error
 
-		image.src = oldData;
+			canvas.width = container.clientWidth - 10; // scrollbar
+			canvas.height = container.clientHeight - header.offsetHeight - 10;
+
+			let image = new Image();
+			
+			image.onload = function() {
+				canvas.getContext("2d").drawImage(image, 0, 0);
+			};
+
+			image.src = oldData;
+		} catch (error) {
+			console.log('failed to recover canvas data from resize');
+			// console.error(error);
+		}
 	}
 
 	const isCanvasBlank = () => {
@@ -116,7 +125,7 @@ const CanvasDrawingModule = (props) => {
 		const container = document.querySelector('.cpa__app-window');
 		const header = document.querySelector('.canvas-drawing-module__header');
 
-		canvas = document.getElementById('canvas');
+		canvas = getCanvas();
 		canvas.width = container.clientWidth - 10; // scrollbar
 		canvas.height = container.clientHeight - header.offsetHeight - 10;
 		ctx = canvas.getContext("2d");
