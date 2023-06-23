@@ -22,6 +22,7 @@ const CanvasDrawingModule = (props) => {
 
 	const savingRef = useRef(false);
 	const colorRef = useRef('black');
+	const penTypeRef = useRef('wacom'); // don't know how to tell this other than knowing ahead of time
 
 	// variant from basic demo here:
 	// https://stackoverflow.com/questions/2368784/draw-on-html5-canvas-using-a-mouse
@@ -131,15 +132,22 @@ const CanvasDrawingModule = (props) => {
 		canvas.height = container.clientHeight - header.offsetHeight - 10;
 		ctx = canvas.getContext("2d");
 
-		canvas.addEventListener("mousemove", function (e) {
+		const penEventMap = {
+			"emr": ['mousemove', 'mousedown', 'mouseup'],
+			"wacom": ['touchmove', 'touchstart', 'touchend']
+		};
+
+		console.log(penTypeRef.current);
+
+		canvas.addEventListener(penEventMap[penTypeRef.current][0], function (e) {
 			findxy('move', e)
 		}, false);
 
-		canvas.addEventListener("mousedown", function (e) {
+		canvas.addEventListener(penEventMap[penTypeRef.current][1], function (e) {
 			findxy('down', e)
 		}, false);
 
-		canvas.addEventListener("mouseup", function (e) {
+		canvas.addEventListener(penEventMap[penTypeRef.current][2], function (e) {
 			findxy('up', e)
 
 			if (!isCanvasBlank() && !savingRef.current) { // this is because of stale variables, can use ref forgot
@@ -173,11 +181,13 @@ const CanvasDrawingModule = (props) => {
 	}
 
 	const findxy = (res, e) => {		
+		const isWacomPen = penTypeRef.current === 'wacom';
+
 		if (res === 'down') {
 			prevX = currX;
 			prevY = currY;
-			currX = e.clientX - canvas.offsetLeft - 90;
-			currY = e.clientY - canvas.offsetTop - 10;
+			currX = (isWacomPen ? e.touches["0"].clientX : e.clientX) - canvas.offsetLeft - 90;
+			currY = (isWacomPen ? e.touches["0"].clientY : e.clientY) - canvas.offsetTop - 10;
 
 			flag = true;
 		}
@@ -190,8 +200,8 @@ const CanvasDrawingModule = (props) => {
 			if (flag) {
 				prevX = currX;
 				prevY = currY;
-				currX = e.clientX - canvas.offsetLeft - 90;
-				currY = e.clientY - canvas.offsetTop - 10;
+				currX = (isWacomPen ? e.touches["0"].clientX : e.clientX) - canvas.offsetLeft - 90;
+				currY = (isWacomPen ? e.touches["0"].clientY : e.clientY) - canvas.offsetTop - 10;
 
 				// avoid palm jumping (draws giant diagonal line from palm to pen tip)
 				// this stops drawing, need to lift up pen/touch down again to continue
@@ -280,6 +290,9 @@ const CanvasDrawingModule = (props) => {
 				</div>
 			</div>
       <div className="DrawingMenu__saving-state">{savingState}</div>
+			<select className="canvas-drawing-module__select-pen-type" onChange={(e) => penTypeRef.current = e.target.value}>
+				{['wacom', 'emr'].map((type, index) => <option key={index} value={type}>{type}</option>)}
+			</select>
 		</div>
 	)
 }

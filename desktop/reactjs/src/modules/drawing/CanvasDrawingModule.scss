@@ -98,6 +98,16 @@
   }
 }
 
+.canvas-drawing-module__select-pen-type {
+  display: block;
+  position: absolute;
+  top: 56px;
+  right: 0.5rem;
+  border: solid 1px #282828;
+  font-size: 1rem;
+  padding: 0.25rem;
+}
+
 .canvas-drawing-module__colors-container {
   display: flex;
   align-items: flex-start;
