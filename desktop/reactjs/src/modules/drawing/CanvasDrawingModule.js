@@ -133,8 +133,8 @@ const CanvasDrawingModule = (props) => {
 		ctx = canvas.getContext("2d");
 
 		const penEventMap = {
-			"emr": ['mousemove', 'mousedown', 'mouseup'],
-			"wacom": ['touchmove', 'touchstart', 'touchend']
+			"emr": ['mousemove', 'mousedown', 'mouseup', 'mouseout'],
+			"wacom": ['touchmove', 'touchstart', 'touchend', 'touchend']
 		};
 
 		console.log(penTypeRef.current);
@@ -155,12 +155,14 @@ const CanvasDrawingModule = (props) => {
 			}
 		}, false);
 
-		canvas.addEventListener("mouseout", function (e) {
+		canvas.addEventListener(penEventMap[penTypeRef.current][3], function (e) {
 			findxy('out', e)
 		}, false);
 
 		initPressure();
 	}
+	
+	const isWacomPen = penTypeRef.current === 'wacom';
 
 	const draw = () => {
 		ctx.beginPath();
@@ -180,9 +182,7 @@ const CanvasDrawingModule = (props) => {
 		}
 	}
 
-	const findxy = (res, e) => {		
-		const isWacomPen = penTypeRef.current === 'wacom';
-
+	const findxy = (res, e) => {
 		if (res === 'down') {
 			prevX = currX;
 			prevY = currY;
